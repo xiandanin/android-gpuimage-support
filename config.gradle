@@ -1,0 +1,43 @@
+ext {
+    android =
+            [
+                    //版本号
+                    versionCode      : 1,
+                    versionName      : "1.0.0",
+
+                    //sdk版本
+                    compileSdkVersion: 26,
+                    buildToolsVersion: "26.0.2",
+                    minSdkVersion    : 14,
+                    targetSdkVersion : 26,
+                    supportVersion   : "26.1.0",
+            ]
+
+    jcenter =
+            [
+                    //项目名称
+                    name       : "jcenter-example",
+                    groupId    : "com.dyhdyh.example",
+                    //项目地址
+                    siteUrl    : "https://github.com/dengyuhan/instagram-login-android",
+                    //项目git地址
+                    gitUrl     : "https://github.com/dengyuhan/instagram-login-android.git",
+                    //项目描述
+                    description: "上传项目到jcenter的示例",
+                    //开发者的一些基本信息
+                    authorId   : "dengyuhan",
+                    authorName : "dengyuhan",
+                    authorEmail: "22309946@qq.com",
+
+                    //开源协议
+                    licenses   : {
+                        license {
+                            name 'MIT'
+                            url 'https://opensource.org/licenses/MIT'
+                        }
+                    },
+                    licenseName: 'MIT'
+            ]
+
+
+}
