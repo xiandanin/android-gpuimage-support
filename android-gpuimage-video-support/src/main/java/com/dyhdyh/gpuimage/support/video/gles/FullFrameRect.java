@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.dyhdyh.gpuimage.support.example.gles;
+package com.dyhdyh.gpuimage.support.video.gles;
 
 /**
  * This class essentially represents a viewport-sized sprite that will be rendered with

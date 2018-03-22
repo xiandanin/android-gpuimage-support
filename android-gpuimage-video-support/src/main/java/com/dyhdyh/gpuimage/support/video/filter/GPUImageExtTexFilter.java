@@ -1,4 +1,4 @@
-package com.dyhdyh.gpuimage.support.example;
+package com.dyhdyh.gpuimage.support.video.filter;
 
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;

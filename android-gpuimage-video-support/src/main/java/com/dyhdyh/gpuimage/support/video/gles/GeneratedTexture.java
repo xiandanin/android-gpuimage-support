@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.dyhdyh.gpuimage.support.example.gles;
+package com.dyhdyh.gpuimage.support.video.gles;
 
 import android.opengl.GLES20;
 
