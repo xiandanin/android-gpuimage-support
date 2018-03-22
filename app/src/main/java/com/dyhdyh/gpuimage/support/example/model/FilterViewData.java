@@ -109,10 +109,10 @@ public class FilterViewData {
 
 
     public static List<FilterModel> transform(@StringRes int groupName, List<FilterModel> models) {
-        for (FilterModel model : models) {
-            model.setFilterGroupNameRes(groupName);
-        }
-        return models;
+        List<FilterModel> data = new ArrayList<>();
+        data.add(new FilterModel(groupName));
+        data.addAll(models);
+        return data;
     }
 
 

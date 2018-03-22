@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clickPlay(View view) {
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        final MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         retriever.setDataSource(this, Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.test));
         Bitmap atTime = retriever.getFrameAtTime();
 
@@ -51,15 +51,26 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(BaseRecyclerAdapter recyclerAdapter, int position, FilterModel item) {
                 boolean checked = !item.isChecked();
                 filterAdapter.setCheckedPosition(position, checked);
-                if (checked){
+                if (checked) {
                     mFilterGroup.addFilter(item.getFilter());
-                }else{
+                } else {
                     mFilterGroup.getFilters().remove(item.getFilter());
                 }
                 mTextureView.setFilter(mFilterGroup);
             }
         });
-        rv_filter.setLayoutManager(new GridLayoutManager(this, 5));
+        final GridLayoutManager layoutManager = new GridLayoutManager(this, 5);
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                if (filterAdapter.getItemViewType(position) != 0) {
+                    return layoutManager.getSpanCount();
+                }
+                return 1;
+            }
+        });
+        rv_filter.setLayoutManager(layoutManager);
+        //rv_filter.addItemDecoration(new StickyRecyclerHeadersDecoration(filterAdapter));
         rv_filter.setAdapter(filterAdapter);
 
         mTextureView.prepare();

@@ -9,6 +9,7 @@ import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
  *         created 2018/3/21 19:18
  */
 public class FilterModel {
+    private boolean isFilterGroupLabel;
     private @StringRes int filterGroupNameRes;
     private @StringRes int filterNameRes;
     private GPUImageFilter filter;
@@ -19,7 +20,20 @@ public class FilterModel {
         this.filter = filter;
     }
 
+    public FilterModel(int filterGroupNameRes) {
+        this.isFilterGroupLabel = true;
+        this.filterGroupNameRes = filterGroupNameRes;
+    }
+
     public FilterModel() {
+    }
+
+    public boolean isFilterGroupLabel() {
+        return isFilterGroupLabel;
+    }
+
+    public void setFilterGroupLabel(boolean filterGroupLabel) {
+        isFilterGroupLabel = filterGroupLabel;
     }
 
     public int getFilterGroupNameRes() {
