@@ -1,4 +1,4 @@
-package com.dyhdyh.gpuimage.support.example;
+package com.dyhdyh.gpuimage.support.example.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.dyhdyh.gpuimage.support.example.CheckAdapterHelper;
+import com.dyhdyh.gpuimage.support.example.R;
+import com.dyhdyh.gpuimage.support.example.model.FilterModel;
 import com.gcssloop.widget.CheckedRCRelativeLayout;
 
 import java.util.List;
@@ -20,29 +23,27 @@ import jp.co.cyberagent.android.gpuimage.GPUImage;
  * @author dengyuhan
  *         created 2018/3/21 19:16
  */
-public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.Holder> implements RadioAdapterHelper.RadioAdapter {
-    private List<FilterModel> mData;
+public class FilterAdapter extends BaseRecyclerAdapter<FilterModel, FilterAdapter.Holder> implements CheckAdapterHelper.CheckAdapter<FilterModel>{
     private GPUImage mGPUImage;
     private Bitmap mSrcBitmap;
 
     private SparseArray<Bitmap> mCacheBitmap;
 
-    private RadioAdapterHelper mHelper;
-
-    private OnItemClickListener<FilterModel> mOnItemClickListener;
+    private CheckAdapterHelper mHelper;
 
     public FilterAdapter(Context context, List<FilterModel> data, Bitmap src) {
-        this.mData = data;
+        super(data);
         this.mSrcBitmap = src;
         this.mGPUImage = new GPUImage(context);
         this.mCacheBitmap = new SparseArray<>();
-        this.mHelper = new RadioAdapterHelper(new RadioAdapterHelper.OnDataCheckedCallback() {
+        this.mHelper = new CheckAdapterHelper(new CheckAdapterHelper.OnDataCheckedCallback() {
             @Override
             public void onDataChecked(int position, boolean checked) {
-                mData.get(position).setChecked(checked);
+                //getData().get(position).setChecked(checked);
             }
         });
     }
+
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -50,8 +51,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.Holder> im
     }
 
     @Override
-    public void onBindViewHolder(Holder holder, final int position) {
-        final FilterModel item = mData.get(position);
+    public void onBindViewHolder(Holder holder, int position, FilterModel item) {
         Bitmap filterBitmap = mCacheBitmap.get(position);
         if (filterBitmap == null) {
             mGPUImage.setFilter(item.getFilter());
@@ -60,35 +60,18 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.Holder> im
         }
         holder.rlContainer.setChecked(item.isChecked());
         holder.ivCover.setImageBitmap(filterBitmap);
-        holder.tvName.setText(item.getFilterName());
+        holder.tvName.setText(item.getFilterNameRes());
+    }
 
-        holder.rlContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mOnItemClickListener != null) {
-                    mOnItemClickListener.onItemClick(FilterAdapter.this, position, item);
-                }
-            }
-        });
+
+    @Override
+    public void setCheckedPosition(int position, boolean checked) {
+        mHelper.setCheckedPosition(this, position, checked);
     }
 
     @Override
-    public int getItemCount() {
-        return mData.size();
-    }
-
-    @Override
-    public void setCheckedPosition(int checkedPosition) {
-        mHelper.setCheckedPosition(this, checkedPosition);
-    }
-
-    @Override
-    public int getCheckedPosition() {
-        return mHelper.getCheckedPosition();
-    }
-
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.mOnItemClickListener = listener;
+    public List<FilterModel> getCheckedList() {
+        return null;
     }
 
     static class Holder extends RecyclerView.ViewHolder {
@@ -102,9 +85,5 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.Holder> im
             ivCover = itemView.findViewById(R.id.iv_filter_cover);
             tvName = itemView.findViewById(R.id.tv_filter_name);
         }
-    }
-
-    public interface OnItemClickListener<T> {
-        void onItemClick(RecyclerView.Adapter adapter, int position, T item);
     }
 }

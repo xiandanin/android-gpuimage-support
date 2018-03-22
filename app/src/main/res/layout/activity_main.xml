@@ -11,25 +11,27 @@
     <com.dyhdyh.gpuimage.support.example.view.GPUImageTextureView
         android:id="@+id/texture"
         android:layout_width="match_parent"
-        android:layout_height="294.5dp" />
+        android:layout_height="300dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_height="match_parent"
+        android:layout_below="@id/texture"
         android:orientation="vertical">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_filter"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:paddingRight="10dp" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="clickPlay"
             android:text="播放" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_filter"
+            android:paddingLeft="7dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false" />
+
     </LinearLayout>
 </RelativeLayout>

@@ -1,3 +1,50 @@
 <resources>
     <string name="app_name">android-gpuimage-support</string>
+
+    <string name="label_start">播放</string>
+
+    <!--调整颜色 Handle Color-->
+    <string name="label_filter_group_handle_color">调整颜色</string>
+    <string name="label_filter_brightness">亮度</string>
+    <string name="label_filter_exposure">曝光</string>
+    <string name="label_filter_contrast">对比度</string>
+    <string name="label_filter_saturation">饱和度</string>
+    <string name="label_filter_gamma">伽马线</string>
+    <string name="label_filter_color_invert">反色</string>
+    <string name="label_filter_sepia">褐色（怀旧）</string>
+    <string name="label_filter_levels">色阶</string>
+    <string name="label_filter_grayscale">灰度</string>
+    <string name="label_filter_rgb">RGB</string>
+    <string name="label_filter_tone_curve">色调曲线</string>
+    <string name="label_filter_monochrome">单色</string>
+    <string name="label_filter_Opacity">不透明度</string>
+    <string name="label_filter_highlight_shadow">提亮阴影</string>
+    <string name="label_filter_false_color">色彩替换</string>
+    <string name="label_filter_hue">色度</string>
+    <string name="label_filter_chroma_key">色度键</string>
+    <string name="label_filter_white_balance">白平横</string>
+    <string name="label_filter_average_color">像素平均色值</string>
+    <string name="label_filter_solid_color">纯色</string>
+    <string name="label_filter_luminosity">亮度平均</string>
+    <string name="label_filter_average_luminance_threshold">像素色值亮度平均</string>
+    <string name="label_filter_lookup">色彩调整</string>
+    <string name="label_filter_amatorka">Amatorka lookup</string>
+    <string name="label_filter_miss_etikate">MissEtikate lookup</string>
+    <string name="label_filter_soft_elegance">SoftElegance lookup</string>
+
+    <!--图像处理 Handle Image-->
+    <string name="label_filter_group_handle_image">图像处理</string>
+    <string name="label_filter_transform">形状变化</string>
+
+    <!--视觉效果 Visual Effect-->
+    <string name="label_filter_group_visual_effect">视觉效果</string>
+    <string name="label_filter_sketch">素描</string>
+
+    <!--视觉效果 Blend-->
+    <string name="label_filter_group_blend">混合模式</string>
+    <string name="label_filter_multiply_blend">阴影和深度</string>
+
+
+    <!--自定义-->
+    <string name="label_filter_group_custom">自定义</string>
 </resources>
