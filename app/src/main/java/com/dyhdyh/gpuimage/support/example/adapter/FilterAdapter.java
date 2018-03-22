@@ -39,7 +39,7 @@ public class FilterAdapter extends BaseRecyclerAdapter<FilterModel, FilterAdapte
         this.mHelper = new CheckAdapterHelper(new CheckAdapterHelper.OnDataCheckedCallback() {
             @Override
             public void onDataChecked(int position, boolean checked) {
-                //getData().get(position).setChecked(checked);
+                getData().get(position).setChecked(checked);
             }
         });
     }

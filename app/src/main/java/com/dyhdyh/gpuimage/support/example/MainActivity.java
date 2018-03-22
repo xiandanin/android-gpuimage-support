@@ -18,9 +18,13 @@ import com.dyhdyh.gpuimage.support.example.view.GPUImageTextureView;
 
 import java.util.List;
 
+import jp.co.cyberagent.android.gpuimage.GPUImageFilterGroup;
+
 public class MainActivity extends AppCompatActivity {
     GPUImageTextureView mTextureView;
     RecyclerView rv_filter;
+
+    private GPUImageFilterGroup mFilterGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +33,8 @@ public class MainActivity extends AppCompatActivity {
         rv_filter = findViewById(R.id.rv_filter);
 
         mTextureView = findViewById(R.id.texture);
-        //mTextureView.setFilter(new GPUImageBulgeDistortionFilter());
+
+        mFilterGroup = new GPUImageFilterGroup();
     }
 
     public void clickPlay(View view) {
@@ -44,8 +49,14 @@ public class MainActivity extends AppCompatActivity {
         filterAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener<FilterModel>() {
             @Override
             public void onItemClick(BaseRecyclerAdapter recyclerAdapter, int position, FilterModel item) {
-                filterAdapter.setCheckedPosition(position, true);
-                mTextureView.setFilter(item.getFilter());
+                boolean checked = !item.isChecked();
+                filterAdapter.setCheckedPosition(position, checked);
+                if (checked){
+                    mFilterGroup.addFilter(item.getFilter());
+                }else{
+                    mFilterGroup.getFilters().remove(item.getFilter());
+                }
+                mTextureView.setFilter(mFilterGroup);
             }
         });
         rv_filter.setLayoutManager(new GridLayoutManager(this, 5));
