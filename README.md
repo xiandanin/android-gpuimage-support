@@ -1,2 +1,2 @@
 # android-gpuimage-support
-基于android-gpuimage的一些扩展
+基于android-gpuimage增加了对视频的支持
