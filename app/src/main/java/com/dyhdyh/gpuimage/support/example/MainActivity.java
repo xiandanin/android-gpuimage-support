@@ -70,11 +70,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         rv_filter.setLayoutManager(layoutManager);
-        //rv_filter.addItemDecoration(new StickyRecyclerHeadersDecoration(filterAdapter));
         rv_filter.setAdapter(filterAdapter);
 
         mTextureView.prepare();
         mTextureView.start();
-
     }
 }

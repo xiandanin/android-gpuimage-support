@@ -14,7 +14,6 @@ import com.dyhdyh.gpuimage.support.example.CheckAdapterHelper;
 import com.dyhdyh.gpuimage.support.example.R;
 import com.dyhdyh.gpuimage.support.example.model.FilterModel;
 import com.gcssloop.widget.CheckedRCRelativeLayout;
-import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
 import java.util.List;
 
@@ -24,7 +23,7 @@ import jp.co.cyberagent.android.gpuimage.GPUImage;
  * @author dengyuhan
  *         created 2018/3/21 19:16
  */
-public class FilterAdapter extends BaseRecyclerAdapter<FilterModel, RecyclerView.ViewHolder> implements CheckAdapterHelper.CheckAdapter<FilterModel>, StickyRecyclerHeadersAdapter<FilterAdapter.HeaderHolder> {
+public class FilterAdapter extends BaseRecyclerAdapter<FilterModel, RecyclerView.ViewHolder> implements CheckAdapterHelper.CheckAdapter<FilterModel>{
     private GPUImage mGPUImage;
     private Bitmap mSrcBitmap;
 
@@ -89,23 +88,6 @@ public class FilterAdapter extends BaseRecyclerAdapter<FilterModel, RecyclerView
     @Override
     public List<FilterModel> getCheckedList() {
         return mHelper.getCheckedList();
-    }
-
-
-    @Override
-    public long getHeaderId(int position) {
-        return getData().get(position).getFilterGroupNameRes();
-    }
-
-    @Override
-    public HeaderHolder onCreateHeaderViewHolder(ViewGroup parent) {
-        return new HeaderHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_filter_header, parent, false));
-    }
-
-    @Override
-    public void onBindHeaderViewHolder(HeaderHolder holder, int position) {
-        FilterModel filterModel = getData().get(position);
-        holder.tvFilterGroup.setText(filterModel.getFilterGroupNameRes());
     }
 
     static class HeaderHolder extends RecyclerView.ViewHolder {

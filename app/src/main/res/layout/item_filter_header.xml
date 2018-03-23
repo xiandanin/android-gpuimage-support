@@ -2,15 +2,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/colorBackground"
-    android:layout_height="wrap_content">
+    android:paddingLeft="1dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="3dp"
+    android:layout_height="wrap_content"
+    android:background="@color/colorBackground">
 
     <TextView
         android:id="@+id/tv_filter_group"
-        android:textColor="@color/colorPrimary"
-        android:textSize="16sp"
-        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp"
         tools:text="@string/label_filter_group_handle_color" />
 </RelativeLayout>
