@@ -163,7 +163,7 @@ public class GPUImageFilter {
         return mGLUniformTexture;
     }
 
-    protected void setInteger(final int location, final int intValue) {
+    public void setInteger(final int location, final int intValue) {
         runOnDraw(new Runnable() {
             @Override
             public void run() {
@@ -172,7 +172,7 @@ public class GPUImageFilter {
         });
     }
 
-    protected void setFloat(final int location, final float floatValue) {
+    public void setFloat(final int location, final float floatValue) {
         runOnDraw(new Runnable() {
             @Override
             public void run() {
@@ -181,7 +181,7 @@ public class GPUImageFilter {
         });
     }
 
-    protected void setFloatVec2(final int location, final float[] arrayValue) {
+    public void setFloatVec2(final int location, final float[] arrayValue) {
         runOnDraw(new Runnable() {
             @Override
             public void run() {
@@ -190,7 +190,7 @@ public class GPUImageFilter {
         });
     }
 
-    protected void setFloatVec3(final int location, final float[] arrayValue) {
+    public void setFloatVec3(final int location, final float[] arrayValue) {
         runOnDraw(new Runnable() {
             @Override
             public void run() {
@@ -199,7 +199,7 @@ public class GPUImageFilter {
         });
     }
 
-    protected void setFloatVec4(final int location, final float[] arrayValue) {
+    public void setFloatVec4(final int location, final float[] arrayValue) {
         runOnDraw(new Runnable() {
             @Override
             public void run() {
@@ -208,7 +208,7 @@ public class GPUImageFilter {
         });
     }
 
-    protected void setFloatArray(final int location, final float[] arrayValue) {
+    public void setFloatArray(final int location, final float[] arrayValue) {
         runOnDraw(new Runnable() {
             @Override
             public void run() {
@@ -217,7 +217,7 @@ public class GPUImageFilter {
         });
     }
 
-    protected void setPoint(final int location, final PointF point) {
+    public void setPoint(final int location, final PointF point) {
         runOnDraw(new Runnable() {
 
             @Override
@@ -230,7 +230,7 @@ public class GPUImageFilter {
         });
     }
 
-    protected void setUniformMatrix3f(final int location, final float[] matrix) {
+    public void setUniformMatrix3f(final int location, final float[] matrix) {
         runOnDraw(new Runnable() {
 
             @Override
@@ -240,7 +240,7 @@ public class GPUImageFilter {
         });
     }
 
-    protected void setUniformMatrix4f(final int location, final float[] matrix) {
+    public void setUniformMatrix4f(final int location, final float[] matrix) {
         runOnDraw(new Runnable() {
 
             @Override
