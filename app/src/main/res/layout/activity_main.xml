@@ -8,15 +8,27 @@
     android:orientation="vertical">
 
 
-    <com.dyhdyh.gpuimage.support.example.view.GPUImageTextureView
-        android:id="@+id/texture"
+    <RelativeLayout
+        android:id="@+id/layout_content"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:layout_height="wrap_content">
+
+        <com.dyhdyh.gpuimage.support.example.view.GPUImageTextureView
+            android:id="@+id/texture"
+            android:layout_width="match_parent"
+            android:layout_height="300dp" />
+
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="300dp" />
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/texture"
+        android:layout_below="@id/layout_content"
         android:orientation="vertical">
 
         <Button
@@ -55,13 +67,13 @@
                     android:textSize="16sp" />
 
                 <TextView
-                    android:textColor="@android:color/black"
                     android:id="@+id/tv_filter_progress"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:textColor="@android:color/black"
                     android:textSize="18sp"
                     tools:text="@string/label_filter_sketch" />
 

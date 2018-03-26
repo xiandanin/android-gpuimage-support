@@ -6,11 +6,11 @@ import android.graphics.Bitmap;
  * @author dengyuhan
  *         created 2018/3/26 11:20
  */
-public class CoverBitmap {
+public class CoverBitmapModel {
     private int index;
     private Bitmap bitmap;
 
-    public CoverBitmap(int index, Bitmap bitmap) {
+    public CoverBitmapModel(int index, Bitmap bitmap) {
         this.index = index;
         this.bitmap = bitmap;
     }

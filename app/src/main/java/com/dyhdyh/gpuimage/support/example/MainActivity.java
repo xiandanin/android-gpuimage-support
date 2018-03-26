@@ -6,14 +6,16 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.dyhdyh.gpuimage.support.example.adapter.BaseRecyclerAdapter;
 import com.dyhdyh.gpuimage.support.example.adapter.FilterAdapter;
-import com.dyhdyh.gpuimage.support.example.model.CoverBitmap;
+import com.dyhdyh.gpuimage.support.example.model.CoverBitmapModel;
 import com.dyhdyh.gpuimage.support.example.model.FilterModel;
-import com.dyhdyh.gpuimage.support.example.model.FilterViewData;
+import com.dyhdyh.gpuimage.support.example.model.FilterExampleData;
+import com.dyhdyh.gpuimage.support.example.util.GPUImageCoverUtil;
 import com.dyhdyh.gpuimage.support.example.view.GPUImageTextureView;
 
 import java.util.List;
@@ -24,6 +26,7 @@ import jp.co.cyberagent.android.gpuimage.adjuster.FilterAdjuster;
 
 public class MainActivity extends AppCompatActivity implements BaseRecyclerAdapter.OnItemClickListener<FilterModel> {
     GPUImageTextureView mTextureView;
+    ImageView mImageView;
     RecyclerView rv_filter;
     SeekBar sb_filter_adjust;
     TextView tv_filter_progress;
@@ -43,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements BaseRecyclerAdapt
         setContentView(R.layout.activity_main);
 
         rv_filter = findViewById(R.id.rv_filter);
+        mImageView = findViewById(R.id.image);
         mTextureView = findViewById(R.id.texture);
         sb_filter_adjust = findViewById(R.id.sb_filter_adjust);
         tv_filter_progress = findViewById(R.id.tv_filter_progress);
@@ -67,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements BaseRecyclerAdapt
     }
 
     public void clickPlay(View view) {
-        List<FilterModel> filters = FilterViewData.all();
+        List<FilterModel> filters = FilterExampleData.all();
 
         //((SimpleItemAnimator) rv_filter.getItemAnimator()).setSupportsChangeAnimations(false);
         mFilterAdapter = new FilterAdapter(filters);
@@ -86,9 +90,9 @@ public class MainActivity extends AppCompatActivity implements BaseRecyclerAdapt
         rv_filter.setAdapter(mFilterAdapter);
 
         mCoverUtil.asyncBindFilterCover(filters)
-                .subscribe(new Consumer<CoverBitmap>() {
+                .subscribe(new Consumer<CoverBitmapModel>() {
                     @Override
-                    public void accept(CoverBitmap bitmap) throws Exception {
+                    public void accept(CoverBitmapModel bitmap) throws Exception {
                         mFilterAdapter.getData().get(bitmap.getIndex()).setCoverBitmap(bitmap.getBitmap());
                         mFilterAdapter.notifyItemChanged(bitmap.getIndex());
                     }

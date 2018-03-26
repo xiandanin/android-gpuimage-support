@@ -14,10 +14,12 @@
     <string name="label_filter_sepia">褐色（怀旧）</string>
     <string name="label_filter_levels">色阶</string>
     <string name="label_filter_grayscale">灰度</string>
+    <string name="label_filter_histogram">色彩直方图，显示在图片上</string>
+    <string name="label_filter_histogram_generator">色彩直方图</string>
     <string name="label_filter_rgb">RGB</string>
     <string name="label_filter_tone_curve">色调曲线</string>
     <string name="label_filter_monochrome">单色</string>
-    <string name="label_filter_Opacity">不透明度</string>
+    <string name="label_filter_opacity">不透明度</string>
     <string name="label_filter_highlight_shadow">提亮阴影</string>
     <string name="label_filter_false_color">色彩替换</string>
     <string name="label_filter_hue">色度</string>
@@ -34,17 +36,100 @@
 
     <!--图像处理 Handle Image-->
     <string name="label_filter_group_handle_image">图像处理</string>
+    <string name="label_filter_crosshair_generator">十字</string>
+    <string name="label_filter_line_generator">线条</string>
     <string name="label_filter_transform">形状变化</string>
+    <string name="label_filter_crop">剪裁</string>
+    <string name="label_filter_sharpen">锐化</string>
+    <string name="label_filter_unsharp_mask">反遮罩锐化</string>
+    <string name="label_filter_fast_blur">模糊</string>
+    <string name="label_filter_gaussian_blur">高斯模糊</string>
+    <string name="label_filter_gaussian_selective_blur">选择性高斯模糊</string>
+    <string name="label_filter_box_blur">盒状模糊</string>
+    <string name="label_filter_tilt_shift">条纹模糊</string>
+    <string name="label_filter_median">中间值</string>
+    <string name="label_filter_bilateral">双边模糊</string>
+    <string name="label_filter_erosion">侵蚀边缘模糊</string>
+    <string name="label_filter_rgb_erosion">RGB侵蚀边缘模糊</string>
+    <string name="label_filter_dilation">扩展边缘模糊</string>
+    <string name="label_filter_rgb_dilation">RGB扩展边缘模糊</string>
+    <string name="label_filter_opening">黑白色调模糊</string>
+    <string name="label_filter_rgb_opening">彩色模糊</string>
+    <string name="label_filter_closing">黑白色调模糊</string>
+    <string name="label_filter_rgb_closing">彩色模糊</string>
+    <string name="label_filter_lanczos_resampling">Lanczos重取样</string>
+    <string name="label_filter_non_maximum_suppression">非最大抑制</string>
+    <string name="label_filter_thresholded_non_maximum_suppression">阈值非最大抑制</string>
+    <string name="label_filter_sobel_edge_detection">Sobel边缘检测算法</string>
+    <string name="label_filter_canny_edge_detection">Canny边缘检测算法</string>
+    <string name="label_filter_threshold_edge_detection">阈值边缘检测</string>
+    <string name="label_filter_prewitt_edge_detection">普瑞维特(Prewitt)边缘检测</string>
+    <string name="label_filter_x_y_derivative">XYDerivative边缘检测</string>
+    <string name="label_filter_harris_corner_detection">Harris角点检测</string>
+    <string name="label_filter_noble_corner_detection">Noble角点检测</string>
+    <string name="label_filter_shi_tomasi_feature_detection">ShiTomasi角点检测</string>
+    <string name="label_filter_motion_detector">动作检测</string>
+    <string name="label_filter_hough_transform_line_detector">线条检测</string>
+    <string name="label_filter_parallel_coordinate_line_transform">平行线检测</string>
+    <string name="label_filter_local_binary_pattern">图像黑白化</string>
+    <string name="label_filter_low_pass">图像加亮</string>
+    <string name="label_filter_high_pass">图像低于某值时显示为黑</string>
 
     <!--视觉效果 Visual Effect-->
     <string name="label_filter_group_visual_effect">视觉效果</string>
     <string name="label_filter_sketch">素描</string>
+    <string name="label_filter_threshold_sketch">阀值素描</string>
+    <string name="label_filter_toon">卡通</string>
+    <string name="label_filter_smooth_toon">更细腻的卡通</string>
+    <string name="label_filter_kuwahara">桑原滤波</string>
+    <string name="label_filter_mosaic">黑白马赛克</string>
+    <string name="label_filter_pixellate">像素化</string>
+    <string name="label_filter_polar_pixellate">同心圆像素化</string>
+    <string name="label_filter_crosshatch">交叉线阴影</string>
+    <string name="label_filter_color_packing">色彩丢失</string>
+    <string name="label_filter_vignette">晕影</string>
+    <string name="label_filter_swirl">漩涡</string>
+    <string name="label_filter_bulge_distortion">鱼眼</string>
+    <string name="label_filter_pinch_distortion">凹面镜</string>
+    <string name="label_filter_stretch_distortion">哈哈镜</string>
+    <string name="label_filter_glass_sphere">水晶球</string>
+    <string name="label_filter_sphere_refraction">球形折射</string>
+    <string name="label_filter_posterize">色调分离</string>
+    <string name="label_filter_cga_colorspace">CGA色彩滤镜</string>
+    <string name="label_filter_perlin_noise">柏林噪点</string>
+    <string name="label_filter_3x3_convolution">3x3卷积</string>
+    <string name="label_filter_emboss">浮雕</string>
+    <string name="label_filter_polka_dot">像素圆点花样</string>
+    <string name="label_filter_halftone">点染</string>
 
     <!--视觉效果 Blend-->
     <string name="label_filter_group_blend">混合模式</string>
     <string name="label_filter_multiply_blend">阴影和深度</string>
+    <string name="label_filter_normal_blend">正常</string>
+    <string name="label_filter_alpha_blend">透明混合</string>
+    <string name="label_filter_dissolve_blend">溶解</string>
+    <string name="label_filter_overlay_blend">叠加</string>
+    <string name="label_filter_darken_blend">加深混合</string>
+    <string name="label_filter_lighten_blend">减淡混合</string>
+    <string name="label_filter_source_over_blend">源混合</string>
+    <string name="label_filter_color_burn_blend">色彩加深混合</string>
+    <string name="label_filter_color_dodge_blend">色彩减淡混合</string>
+    <string name="label_filter_screen_blend">屏幕包裹</string>
+    <string name="label_filter_exclusion_blend">排除混合</string>
+    <string name="label_filter_difference_blend">差异混合</string>
+    <string name="label_filter_subtract_blend">差值混合</string>
+    <string name="label_filter_hard_light_blend">强光混合</string>
+    <string name="label_filter_soft_light_blend">柔光混合</string>
+    <string name="label_filter_chroma_key_blend">色度键混合</string>
+    <string name="label_filter_mask">遮罩混合</string>
+    <string name="label_filter_haze">朦胧加暗</string>
+    <string name="label_filter_luminance_threshold">亮度阈</string>
+    <string name="label_filter_adaptive_threshold">自适应阈值</string>
+    <string name="label_filter_add_blend">动画变亮模糊</string>
+    <string name="label_filter_divide_blend">动画变暗模糊</string>
 
 
     <!--自定义-->
     <string name="label_filter_group_custom">自定义</string>
+    <string name="label_filter_aperture_blur">光圈模糊</string>
 </resources>

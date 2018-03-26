@@ -1,11 +1,12 @@
-package com.dyhdyh.gpuimage.support.example;
+package com.dyhdyh.gpuimage.support.example.util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 
-import com.dyhdyh.gpuimage.support.example.model.CoverBitmap;
+import com.dyhdyh.gpuimage.support.example.R;
+import com.dyhdyh.gpuimage.support.example.model.CoverBitmapModel;
 import com.dyhdyh.gpuimage.support.example.model.FilterModel;
 
 import java.util.List;
@@ -48,10 +49,10 @@ public class GPUImageCoverUtil {
      * @param filters
      * @return
      */
-    public Observable<CoverBitmap> asyncBindFilterCover(final List<FilterModel> filters) {
-        return Observable.create(new ObservableOnSubscribe<CoverBitmap>() {
+    public Observable<CoverBitmapModel> asyncBindFilterCover(final List<FilterModel> filters) {
+        return Observable.create(new ObservableOnSubscribe<CoverBitmapModel>() {
             @Override
-            public void subscribe(ObservableEmitter<CoverBitmap> emitter) throws Exception {
+            public void subscribe(ObservableEmitter<CoverBitmapModel> emitter) throws Exception {
                 try {
                     Bitmap srcBitmap = getSrcBitmap();
 
@@ -62,7 +63,7 @@ public class GPUImageCoverUtil {
                         if (filter.getFilter() != null) {
                             gpuImage.setFilter(filter.getFilter());
                             Bitmap filterBitmap = gpuImage.getBitmapWithFilterApplied(srcBitmap);
-                            emitter.onNext(new CoverBitmap(i, filterBitmap));
+                            emitter.onNext(new CoverBitmapModel(i, filterBitmap));
                         }
                     }
                     emitter.onComplete();
