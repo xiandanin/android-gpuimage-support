@@ -1,34 +1,41 @@
 package com.dyhdyh.gpuimage.support.example;
 
-import android.graphics.Bitmap;
-import android.media.MediaMetadataRetriever;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
+import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.dyhdyh.gpuimage.support.example.adapter.BaseRecyclerAdapter;
 import com.dyhdyh.gpuimage.support.example.adapter.FilterAdapter;
+import com.dyhdyh.gpuimage.support.example.model.CoverBitmap;
 import com.dyhdyh.gpuimage.support.example.model.FilterModel;
 import com.dyhdyh.gpuimage.support.example.model.FilterViewData;
 import com.dyhdyh.gpuimage.support.example.view.GPUImageTextureView;
 
 import java.util.List;
 
+import io.reactivex.functions.Consumer;
 import jp.co.cyberagent.android.gpuimage.GPUImageFilterGroup;
+import jp.co.cyberagent.android.gpuimage.adjuster.FilterAdjuster;
 
-public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener {
+public class MainActivity extends AppCompatActivity implements BaseRecyclerAdapter.OnItemClickListener<FilterModel> {
     GPUImageTextureView mTextureView;
     RecyclerView rv_filter;
     SeekBar sb_filter_adjust;
     TextView tv_filter_progress;
+    View layout_filter_adjust;
 
     private GPUImageFilterGroup mFilterGroup;
+    private FilterAdjuster mFilterAdjuster;
+
+    private FilterAdapter mFilterAdapter;
+    private GPUImageCoverUtil mCoverUtil;
+
+    private int mLastSeekbarPosition;//最后显示seekbar的滤镜位置
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,63 +45,131 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
         rv_filter = findViewById(R.id.rv_filter);
         mTextureView = findViewById(R.id.texture);
         sb_filter_adjust = findViewById(R.id.sb_filter_adjust);
-        sb_filter_adjust.setOnSeekBarChangeListener(this);
         tv_filter_progress = findViewById(R.id.tv_filter_progress);
+        layout_filter_adjust = findViewById(R.id.layout_filter_adjust);
 
+        findViewById(R.id.tv_filter_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancelFilterSeekBar();
+            }
+        });
+
+        findViewById(R.id.tv_filter_confirm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                layout_filter_adjust.setVisibility(View.GONE);
+            }
+        });
+
+        mCoverUtil = new GPUImageCoverUtil(this);
         mFilterGroup = new GPUImageFilterGroup();
     }
 
     public void clickPlay(View view) {
-        final MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        retriever.setDataSource(this, Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.test));
-        Bitmap atTime = retriever.getFrameAtTime();
-
         List<FilterModel> filters = FilterViewData.all();
 
-        ((SimpleItemAnimator) rv_filter.getItemAnimator()).setSupportsChangeAnimations(false);
-        final FilterAdapter filterAdapter = new FilterAdapter(this, filters, atTime);
-        filterAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener<FilterModel>() {
-            @Override
-            public void onItemClick(BaseRecyclerAdapter recyclerAdapter, int position, FilterModel item) {
-                boolean checked = !item.isChecked();
-                filterAdapter.setCheckedPosition(position, checked);
-                if (checked) {
-                    mFilterGroup.addFilter(item.getFilter());
-                } else {
-                    mFilterGroup.getFilters().remove(item.getFilter());
-                }
-                mTextureView.setFilter(mFilterGroup);
-            }
-        });
+        //((SimpleItemAnimator) rv_filter.getItemAnimator()).setSupportsChangeAnimations(false);
+        mFilterAdapter = new FilterAdapter(filters);
+        mFilterAdapter.setOnItemClickListener(this);
         final GridLayoutManager layoutManager = new GridLayoutManager(this, 5);
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                if (filterAdapter.getItemViewType(position) != 0) {
+                if (mFilterAdapter.getItemViewType(position) != 0) {
                     return layoutManager.getSpanCount();
                 }
                 return 1;
             }
         });
         rv_filter.setLayoutManager(layoutManager);
-        rv_filter.setAdapter(filterAdapter);
+        rv_filter.setAdapter(mFilterAdapter);
+
+        mCoverUtil.asyncBindFilterCover(filters)
+                .subscribe(new Consumer<CoverBitmap>() {
+                    @Override
+                    public void accept(CoverBitmap bitmap) throws Exception {
+                        mFilterAdapter.getData().get(bitmap.getIndex()).setCoverBitmap(bitmap.getBitmap());
+                        mFilterAdapter.notifyItemChanged(bitmap.getIndex());
+                    }
+                });
 
         mTextureView.prepare();
         mTextureView.start();
     }
 
     @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        tv_filter_progress.setText();
+    public void onItemClick(BaseRecyclerAdapter recyclerAdapter, final int position, final FilterModel item) {
+        mFilterAdjuster = item.getAdjuster();
+        if (mFilterAdjuster == null) {
+            layout_filter_adjust.setVisibility(View.GONE);
+            //没有调整器就直接设置
+            boolean checked = !item.isChecked();
+            setFilter(position, checked);
+        } else {
+            showFilterSeekBar(position);
+        }
+
     }
 
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
 
+    public void showFilterSeekBar(final int position) {
+        final FilterModel item = mFilterAdapter.getItem(position);
+        mLastSeekbarPosition = position;
+        layout_filter_adjust.setVisibility(View.VISIBLE);
+
+        setFilter(position, true);
+
+        setFilterSeekBarTitle(item);
+
+        sb_filter_adjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                FilterAdjuster adjuster = item.getAdjuster();
+                if (adjuster != null) {
+                    adjuster.adjust(progress);
+                }
+                item.setProgress(progress);
+                setFilterSeekBarTitle(item);
+                mFilterAdapter.notifyItemChanged(position);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        sb_filter_adjust.setProgress(item.getProgress());
     }
 
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
+    public void setFilter(int position, boolean checked) {
+        FilterModel item = mFilterAdapter.getItem(position);
+        mFilterAdapter.setCheckedPositionArray(new int[]{position}, checked);
+        if (checked) {
+            if (!mFilterGroup.getFilters().contains(item.getFilter())){
+                mFilterGroup.addFilter(item.getFilter());
+            }
+        } else {
+            mFilterGroup.getFilters().remove(item.getFilter());
+        }
+        mTextureView.setFilter(mFilterGroup);
 
+        Log.i("------------>", mFilterGroup.getFilters()+"");
     }
+
+    public void cancelFilterSeekBar() {
+        layout_filter_adjust.setVisibility(View.GONE);
+        setFilter(mLastSeekbarPosition, false);
+    }
+
+    public void setFilterSeekBarTitle(FilterModel item) {
+        String title = getResources().getString(item.getFilterNameRes()) + " " + String.valueOf(item.getProgress());
+        tv_filter_progress.setText(title);
+    }
+
 }

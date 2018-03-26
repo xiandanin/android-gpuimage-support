@@ -197,7 +197,7 @@ public class RenderThread extends Thread implements
     }
 
     public void setFilter(GPUImageFilter filter) {
-        Log.i(TAG, "setFilter--->" + filter + "," + Thread.currentThread().getName());
+        //Log.i(TAG, "setFilter--->" + filter + "," + Thread.currentThread().getName());
 
         final GPUImageFilter oldFilter = mFilter;
         this.mCurrentFilter = filter;

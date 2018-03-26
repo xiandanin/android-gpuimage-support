@@ -1,46 +1,31 @@
 package com.dyhdyh.gpuimage.support.example.adapter;
 
-import android.content.Context;
-import android.graphics.Bitmap;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.dyhdyh.gpuimage.support.example.CheckAdapterHelper;
 import com.dyhdyh.gpuimage.support.example.R;
 import com.dyhdyh.gpuimage.support.example.model.FilterModel;
+import com.dyhdyh.helper.checkable.MultipleCheckableAdapter;
+import com.dyhdyh.helper.checkable.MultipleCheckableHelper;
 import com.gcssloop.widget.CheckedRCRelativeLayout;
 
 import java.util.List;
-
-import jp.co.cyberagent.android.gpuimage.GPUImage;
 
 /**
  * @author dengyuhan
  *         created 2018/3/21 19:16
  */
-public class FilterAdapter extends BaseRecyclerAdapter<FilterModel, RecyclerView.ViewHolder> implements CheckAdapterHelper.CheckAdapter<FilterModel>{
-    private GPUImage mGPUImage;
-    private Bitmap mSrcBitmap;
+public class FilterAdapter extends BaseRecyclerAdapter<FilterModel, RecyclerView.ViewHolder> implements MultipleCheckableAdapter<FilterModel> {
+    private MultipleCheckableHelper mHelper;
 
-    private SparseArray<Bitmap> mCacheBitmap;
-    private CheckAdapterHelper mHelper;
-
-    public FilterAdapter(Context context, List<FilterModel> data, Bitmap src) {
+    public FilterAdapter(List<FilterModel> data) {
         super(data);
-        this.mSrcBitmap = src;
-        this.mGPUImage = new GPUImage(context);
-        this.mCacheBitmap = new SparseArray<>();
-        this.mHelper = new CheckAdapterHelper(new CheckAdapterHelper.OnDataCheckedCallback() {
-            @Override
-            public void onDataChecked(int position, boolean checked) {
-                getData().get(position).setChecked(checked);
-            }
-        });
+        this.mHelper = new MultipleCheckableHelper<>(this);
     }
 
     @Override
@@ -63,15 +48,14 @@ public class FilterAdapter extends BaseRecyclerAdapter<FilterModel, RecyclerView
         int itemViewType = getItemViewType(position);
         if (itemViewType == 0) {
             ItemHolder holder = (ItemHolder) viewHolder;
-            Bitmap filterBitmap = mCacheBitmap.get(position);
-            if (filterBitmap == null) {
-                mGPUImage.setFilter(item.getFilter());
-                filterBitmap = mGPUImage.getBitmapWithFilterApplied(mSrcBitmap);
-                mCacheBitmap.put(position, filterBitmap);
-            }
             holder.rlContainer.setChecked(item.isChecked());
-            holder.ivCover.setImageBitmap(filterBitmap);
+            if (item.getCoverBitmap() == null) {
+                holder.ivCover.setImageDrawable(new ColorDrawable(holder.itemView.getResources().getColor(R.color.colorLoading)));
+            } else {
+                holder.ivCover.setImageBitmap(item.getCoverBitmap());
+            }
             holder.tvName.setText(item.getFilterNameRes());
+            holder.tvProgress.setText(String.valueOf(item.getProgress()));
         } else {
             HeaderHolder holder = (HeaderHolder) viewHolder;
             holder.tvFilterGroup.setText(item.getFilterGroupNameRes());
@@ -81,14 +65,35 @@ public class FilterAdapter extends BaseRecyclerAdapter<FilterModel, RecyclerView
 
 
     @Override
-    public void setCheckedPosition(int position, boolean checked) {
-        mHelper.setCheckedPosition(this, position, checked);
+    public void setCheckedPositionArray(int[] checkedPositionArray, boolean checked) {
+        mHelper.setCheckedPositionArray(checkedPositionArray, checked);
+    }
+
+    @Override
+    public int[] getCheckedPositionArray() {
+        return mHelper.getCheckedPositionArray();
     }
 
     @Override
     public List<FilterModel> getCheckedList() {
         return mHelper.getCheckedList();
     }
+
+    @Override
+    public void onAdapterNotifyChanged(int[] checkedPositionArray) {
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void onChecked(int checkedPosition, boolean checked) {
+        getData().get(checkedPosition).setChecked(checked);
+    }
+
+    @Override
+    public void clear() {
+        mHelper.clear();
+    }
+
 
     static class HeaderHolder extends RecyclerView.ViewHolder {
         TextView tvFilterGroup;
@@ -103,12 +108,14 @@ public class FilterAdapter extends BaseRecyclerAdapter<FilterModel, RecyclerView
         CheckedRCRelativeLayout rlContainer;
         ImageView ivCover;
         TextView tvName;
+        TextView tvProgress;
 
         public ItemHolder(View itemView) {
             super(itemView);
             rlContainer = itemView.findViewById(R.id.rl_container);
             ivCover = itemView.findViewById(R.id.iv_filter_cover);
             tvName = itemView.findViewById(R.id.tv_filter_name);
+            tvProgress = itemView.findViewById(R.id.tv_filter_progress);
         }
     }
 }

@@ -30,6 +30,9 @@ import jp.co.cyberagent.android.gpuimage.GPUImageSketchFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageToneCurveFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageTransformFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageWhiteBalanceFilter;
+import jp.co.cyberagent.android.gpuimage.adjuster.BrightnessAdjuster;
+import jp.co.cyberagent.android.gpuimage.adjuster.ContrastAdjuster;
+import jp.co.cyberagent.android.gpuimage.adjuster.ExposureAdjuster;
 
 /**
  * @author dengyuhan
@@ -50,9 +53,9 @@ public class FilterViewData {
     public static List<FilterModel> handleColor() {
         FilterModel[] filterArray = new FilterModel[]{
                 //调整颜色 Handle Color
-                new FilterModel(R.string.label_filter_brightness, new GPUImageBrightnessFilter()),
-                new FilterModel(R.string.label_filter_exposure, new GPUImageExposureFilter()),
-                new FilterModel(R.string.label_filter_contrast, new GPUImageContrastFilter()),
+                new FilterModel(R.string.label_filter_brightness, new GPUImageBrightnessFilter(), new BrightnessAdjuster(), 50),
+                new FilterModel(R.string.label_filter_exposure, new GPUImageExposureFilter(), new ExposureAdjuster(), 0),
+                new FilterModel(R.string.label_filter_contrast, new GPUImageContrastFilter(), new ContrastAdjuster(), 0),
                 new FilterModel(R.string.label_filter_saturation, new GPUImageSaturationFilter()),
                 new FilterModel(R.string.label_filter_gamma, new GPUImageGammaFilter()),
                 new FilterModel(R.string.label_filter_color_invert, new GPUImageColorInvertFilter()),

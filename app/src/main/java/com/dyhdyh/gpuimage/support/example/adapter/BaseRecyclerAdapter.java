@@ -3,6 +3,8 @@ package com.dyhdyh.gpuimage.support.example.adapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.dyhdyh.gpuimage.support.example.model.FilterModel;
+
 import java.util.List;
 
 /**
@@ -24,6 +26,10 @@ public abstract class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
 
     public List<T> getData() {
         return mData;
+    }
+
+    public T getItem(int position) {
+        return mData.get(position);
     }
 
     @Override

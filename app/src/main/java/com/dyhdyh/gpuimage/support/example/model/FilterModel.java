@@ -1,8 +1,10 @@
 package com.dyhdyh.gpuimage.support.example.model;
 
+import android.graphics.Bitmap;
 import android.support.annotation.StringRes;
 
 import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
+import jp.co.cyberagent.android.gpuimage.adjuster.FilterAdjuster;
 
 /**
  * @author dengyuhan
@@ -10,14 +12,32 @@ import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
  */
 public class FilterModel {
     private boolean isFilterGroupLabel;
-    private @StringRes int filterGroupNameRes;
-    private @StringRes int filterNameRes;
+    private @StringRes
+    int filterGroupNameRes;
+
+    private @StringRes
+    int filterNameRes;
+
     private GPUImageFilter filter;
+    private FilterAdjuster adjuster;
+
+    private Bitmap coverBitmap;
+    private int progress;
     private boolean checked;
 
+
     public FilterModel(@StringRes int filterNameRes, GPUImageFilter filter) {
+        this(filterNameRes, filter, null, 0);
+    }
+
+    public FilterModel(@StringRes int filterNameRes, GPUImageFilter filter, FilterAdjuster adjuster, int defaultProgress) {
         this.filterNameRes = filterNameRes;
         this.filter = filter;
+        this.adjuster = adjuster;
+        if (this.adjuster != null) {
+            this.adjuster.filter(this.filter);
+            this.progress = defaultProgress;
+        }
     }
 
     public FilterModel(int filterGroupNameRes) {
@@ -26,6 +46,14 @@ public class FilterModel {
     }
 
     public FilterModel() {
+    }
+
+    public int getProgress() {
+        return progress;
+    }
+
+    public void setProgress(int progress) {
+        this.progress = progress;
     }
 
     public boolean isFilterGroupLabel() {
@@ -66,5 +94,21 @@ public class FilterModel {
 
     public void setChecked(boolean checked) {
         this.checked = checked;
+    }
+
+    public Bitmap getCoverBitmap() {
+        return coverBitmap;
+    }
+
+    public void setCoverBitmap(Bitmap coverBitmap) {
+        this.coverBitmap = coverBitmap;
+    }
+
+    public FilterAdjuster getAdjuster() {
+        return adjuster;
+    }
+
+    public void setAdjuster(FilterAdjuster adjuster) {
+        this.adjuster = adjuster;
     }
 }
