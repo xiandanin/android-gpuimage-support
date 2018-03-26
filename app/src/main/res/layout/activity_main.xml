@@ -27,11 +27,34 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_filter"
-            android:paddingLeft="10dp"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:clipToPadding="false" />
+            android:clipToPadding="false"
+            android:paddingLeft="10dp" />
+
+        <RelativeLayout
+            android:id="@+id/layout_filter_adjust"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_filter_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="4dp"
+                tools:text="@string/label_filter_sketch" />
+
+            <android.support.v7.widget.AppCompatSeekBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/sb_filter_adjust"
+                android:layout_below="@id/tv_filter_progress"
+                android:thumb="@drawable/shape_seekbar_thumb" />
+        </RelativeLayout>
 
     </LinearLayout>
 </RelativeLayout>

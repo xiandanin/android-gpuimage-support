@@ -9,6 +9,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.view.View;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.dyhdyh.gpuimage.support.example.adapter.BaseRecyclerAdapter;
 import com.dyhdyh.gpuimage.support.example.adapter.FilterAdapter;
@@ -20,9 +22,11 @@ import java.util.List;
 
 import jp.co.cyberagent.android.gpuimage.GPUImageFilterGroup;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener {
     GPUImageTextureView mTextureView;
     RecyclerView rv_filter;
+    SeekBar sb_filter_adjust;
+    TextView tv_filter_progress;
 
     private GPUImageFilterGroup mFilterGroup;
 
@@ -30,9 +34,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        rv_filter = findViewById(R.id.rv_filter);
 
+        rv_filter = findViewById(R.id.rv_filter);
         mTextureView = findViewById(R.id.texture);
+        sb_filter_adjust = findViewById(R.id.sb_filter_adjust);
+        sb_filter_adjust.setOnSeekBarChangeListener(this);
+        tv_filter_progress = findViewById(R.id.tv_filter_progress);
 
         mFilterGroup = new GPUImageFilterGroup();
     }
@@ -74,5 +81,20 @@ public class MainActivity extends AppCompatActivity {
 
         mTextureView.prepare();
         mTextureView.start();
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        tv_filter_progress.setText();
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
     }
 }
