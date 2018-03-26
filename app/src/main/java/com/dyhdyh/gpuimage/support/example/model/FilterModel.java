@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.support.annotation.StringRes;
 
 import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
-import jp.co.cyberagent.android.gpuimage.adjuster.FilterAdjuster;
+import jp.co.cyberagent.android.gpuimage.adjuster.GPUImageAdjuster;
 
 /**
  * @author dengyuhan
@@ -19,7 +19,7 @@ public class FilterModel {
     int filterNameRes;
 
     private GPUImageFilter filter;
-    private FilterAdjuster adjuster;
+    private GPUImageAdjuster adjuster;
 
     private Bitmap coverBitmap;
     private int progress;
@@ -30,7 +30,7 @@ public class FilterModel {
         this(filterNameRes, filter, null, 0);
     }
 
-    public FilterModel(@StringRes int filterNameRes, GPUImageFilter filter, FilterAdjuster adjuster, int defaultProgress) {
+    public FilterModel(@StringRes int filterNameRes, GPUImageFilter filter, GPUImageAdjuster adjuster, int defaultProgress) {
         this.filterNameRes = filterNameRes;
         this.filter = filter;
         this.adjuster = adjuster;
@@ -104,11 +104,11 @@ public class FilterModel {
         this.coverBitmap = coverBitmap;
     }
 
-    public FilterAdjuster getAdjuster() {
+    public GPUImageAdjuster getAdjuster() {
         return adjuster;
     }
 
-    public void setAdjuster(FilterAdjuster adjuster) {
+    public void setAdjuster(GPUImageAdjuster adjuster) {
         this.adjuster = adjuster;
     }
 }

@@ -22,7 +22,7 @@ import java.util.List;
 
 import io.reactivex.functions.Consumer;
 import jp.co.cyberagent.android.gpuimage.GPUImageFilterGroup;
-import jp.co.cyberagent.android.gpuimage.adjuster.FilterAdjuster;
+import jp.co.cyberagent.android.gpuimage.adjuster.GPUImageAdjuster;
 
 public class MainActivity extends AppCompatActivity implements BaseRecyclerAdapter.OnItemClickListener<FilterModel> {
     GPUImageTextureView mTextureView;
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements BaseRecyclerAdapt
     View layout_filter_adjust;
 
     private GPUImageFilterGroup mFilterGroup;
-    private FilterAdjuster mFilterAdjuster;
+    private GPUImageAdjuster mFilterAdjuster;
 
     private FilterAdapter mFilterAdapter;
     private GPUImageCoverUtil mCoverUtil;
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements BaseRecyclerAdapt
         sb_filter_adjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                FilterAdjuster adjuster = item.getAdjuster();
+                GPUImageAdjuster adjuster = item.getAdjuster();
                 if (adjuster != null) {
                     adjuster.adjust(progress);
                 }

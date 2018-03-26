@@ -83,7 +83,7 @@
     <string name="label_filter_smooth_toon">更细腻的卡通</string>
     <string name="label_filter_kuwahara">桑原滤波</string>
     <string name="label_filter_mosaic">黑白马赛克</string>
-    <string name="label_filter_pixellate">像素化</string>
+    <string name="label_filter_pixelation">像素化</string>
     <string name="label_filter_polar_pixellate">同心圆像素化</string>
     <string name="label_filter_crosshatch">交叉线阴影</string>
     <string name="label_filter_color_packing">色彩丢失</string>
