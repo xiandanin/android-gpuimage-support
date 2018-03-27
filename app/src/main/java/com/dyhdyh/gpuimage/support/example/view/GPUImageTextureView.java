@@ -3,6 +3,7 @@ package com.dyhdyh.gpuimage.support.example.view;
 import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -10,9 +11,10 @@ import android.view.TextureView;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.dyhdyh.gpuimage.support.example.R;
 import com.dyhdyh.gpuimage.support.video.render.RenderHandler;
 import com.dyhdyh.gpuimage.support.video.render.RenderThread;
+
+import java.io.IOException;
 
 import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
 
@@ -44,7 +46,7 @@ public class GPUImageTextureView extends FrameLayout implements TextureView.Surf
 
     private void initView(Context context) {
         if (mMediaPlayer == null) {
-            mMediaPlayer = MediaPlayer.create(getContext(), R.raw.test);
+            mMediaPlayer = new MediaPlayer();
             mMediaPlayer.setLooping(true);
         }
 
@@ -64,10 +66,29 @@ public class GPUImageTextureView extends FrameLayout implements TextureView.Surf
         addView(mTextureView, 0, params);
     }
 
+    public void setDataSource(String path) {
+        try {
+            mMediaPlayer.setDataSource(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setDataSource(int resId) {
+        setDataSource(Uri.parse("android.resource://" + getContext().getPackageName() + "/" + resId));
+    }
+
+    public void setDataSource(Uri uri) {
+        try {
+            mMediaPlayer.setDataSource(getContext(), uri);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-        Log.d(TAG, "onSurfaceTextureAvailable surfaceTexture=" + surface.hashCode()+ "," + Thread.currentThread().getName());
+        Log.d(TAG, "onSurfaceTextureAvailable surfaceTexture=" + surface.hashCode() + "," + Thread.currentThread().getName());
 
         if (mRenderThread != null) {
             // Normal case -- render thread is running, tell it about the new surface.
@@ -89,12 +110,12 @@ public class GPUImageTextureView extends FrameLayout implements TextureView.Surf
 
     @Override
     public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-        Log.d(TAG, "onSurfaceTextureSizeChanged surfaceTexture=" + surface.hashCode()+ "," + Thread.currentThread().getName());
+        Log.d(TAG, "onSurfaceTextureSizeChanged surfaceTexture=" + surface.hashCode() + "," + Thread.currentThread().getName());
     }
 
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-        Log.d(TAG, "onSurfaceTextureDestroyed surfaceTexture=" + surface.hashCode()+ "," + Thread.currentThread().getName());
+        Log.d(TAG, "onSurfaceTextureDestroyed surfaceTexture=" + surface.hashCode() + "," + Thread.currentThread().getName());
         if (mRenderThread != null) {
             RenderHandler rh = mRenderThread.getHandler();
             rh.sendSurfaceDestroyed(surface);
@@ -108,11 +129,28 @@ public class GPUImageTextureView extends FrameLayout implements TextureView.Surf
 
     }
 
+    public void pause() {
+        mMediaPlayer.pause();
+    }
+
     public void prepare() {
+        try {
+            mMediaPlayer.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void start() {
         mMediaPlayer.start();
+    }
+
+    public void stop() {
+        mMediaPlayer.stop();
+    }
+
+    public void release() {
+        mMediaPlayer.release();
     }
 
     public void setFilter(GPUImageFilter filter) {

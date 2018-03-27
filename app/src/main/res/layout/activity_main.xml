@@ -19,8 +19,9 @@
             android:layout_height="300dp" />
 
         <ImageView
-            android:visibility="gone"
             android:id="@+id/image"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="300dp" />
     </RelativeLayout>
@@ -30,12 +31,6 @@
         android:layout_height="match_parent"
         android:layout_below="@id/layout_content"
         android:orientation="vertical">
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="clickPlay"
-            android:text="播放" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_filter"

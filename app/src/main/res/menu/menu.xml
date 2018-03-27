@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:onClick="clickVideo"
+        android:title="视频" />
+    <item
+        android:onClick="clickImage"
+        android:title="图片" />
+    <item
+        android:onClick="clickAlbum"
+        android:title="相册" />
+    <item
+        android:onClick="clickReset"
+        android:title="重置" />
+</menu>

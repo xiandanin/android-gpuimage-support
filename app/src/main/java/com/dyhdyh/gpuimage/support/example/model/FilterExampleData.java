@@ -3,7 +3,7 @@ package com.dyhdyh.gpuimage.support.example.model;
 import android.support.annotation.StringRes;
 
 import com.dyhdyh.gpuimage.support.example.R;
-import com.dyhdyh.gpuimage.support.example.adjuster.ApertureBlurAdjuster;
+import com.dyhdyh.gpuimage.support.example.adjuster.GPUImageApertureBlurAdjuster;
 import com.dyhdyh.gpuimage.support.example.filter.GPUImageApertureBlurFilter;
 
 import java.util.ArrayList;
@@ -265,7 +265,7 @@ public class FilterExampleData {
 
         FilterModel[] filterArray = new FilterModel[]{
                 //自定义
-                new FilterModel(R.string.label_filter_aperture_blur, new GPUImageApertureBlurFilter(), new ApertureBlurAdjuster(), 0),
+                new FilterModel(R.string.label_filter_aperture_blur, new GPUImageApertureBlurFilter(), new GPUImageApertureBlurAdjuster(), 0),
                 //new FilterModel(R.string.label_filter_aperture_blur, new ApertureBlurFilter()),
         };
         return Arrays.asList(filterArray);

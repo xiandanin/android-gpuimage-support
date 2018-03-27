@@ -9,7 +9,7 @@ import jp.co.cyberagent.android.gpuimage.adjuster.GPUImageAdjuster;
  * @author dengyuhan
  *         created 2018/3/26 17:23
  */
-public class ApertureBlurAdjuster extends GPUImageAdjuster<GPUImageApertureBlurFilter> {
+public class GPUImageApertureBlurAdjuster extends GPUImageAdjuster<GPUImageApertureBlurFilter> {
     @Override
     public void adjust(int percentage) {
         getFilter().setBlurSize(range(percentage, 0.0f, 1.0f));
