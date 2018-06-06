@@ -54,4 +54,8 @@ public class GPUImageTextureLayout extends FrameLayout {
     public void requestRender() {
         mGPUImage.requestRender();
     }
+
+    public GPUImage getGPUImage() {
+        return mGPUImage;
+    }
 }

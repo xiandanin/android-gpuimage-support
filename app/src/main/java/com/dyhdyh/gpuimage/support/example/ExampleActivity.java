@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import com.dyhdyh.gpuimage.support.example.adapter.BaseRecyclerAdapter;
 import com.dyhdyh.gpuimage.support.example.adapter.FilterAdapter;
@@ -20,13 +21,18 @@ import com.dyhdyh.gpuimage.support.example.model.FilterModel;
 import com.dyhdyh.gpuimage.support.example.util.GPUImageCoverUtil;
 import com.dyhdyh.gpuimage.support.example.view.FilterSeekLayout;
 import com.dyhdyh.gpuimage.support.example.view.GPUImageTextureLayout;
+import com.dyhdyh.gpuimage.support.rxjava2.GPUImageOutput;
+import com.dyhdyh.gpuimage.support.rxjava2.GPUImageRxJava2Adapter;
+import com.dyhdyh.subscribers.loadingbar.rxjava2.SimpleLoadingDialogObserver;
 
 import java.io.File;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import jp.co.cyberagent.android.gpuimage.adjuster.GPUImageAdjuster;
 
 /**
@@ -104,6 +110,7 @@ public class ExampleActivity extends AppCompatActivity implements BaseRecyclerAd
             seekLayout.setVisibility(View.GONE);
             setGPUImageFilter(position);
         }
+        clickExportFile(null);
     }
 
     public void showFilterSeekBar(final int position) {
@@ -142,9 +149,22 @@ public class ExampleActivity extends AppCompatActivity implements BaseRecyclerAd
 
     /**
      * 导出文件
+     *
      * @param item
      */
     public void clickExportFile(MenuItem item) {
-
+        File outputFile = new File(getExternalCacheDir(), "filter.png");
+        new GPUImageOutput(texture.getGPUImage())
+                .setOutputFile(outputFile)
+                .outputFilterBitmap(null, GPUImageRxJava2Adapter.<File>create())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SimpleLoadingDialogObserver<File>(this){
+                    @Override
+                    public void onNext(File file) {
+                        super.onNext(file);
+                        Toast.makeText(ExampleActivity.this, "保存成功->"+file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }

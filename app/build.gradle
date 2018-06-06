@@ -25,17 +25,22 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:26.1.0'
     implementation 'com.github.dengyuhan:rclayout:1.4.6.0'
     implementation 'com.dyhdyh:checkable-helper:1.0.0'
-    implementation "io.reactivex.rxjava2:rxjava:2.1.12"
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.12'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
     implementation 'com.zhihu.android:matisse:0.5.0-beta3'
     implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation 'com.jakewharton:butterknife:8.4.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
-
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+    implementation 'com.dyhdyh.rxjava:subscribers:1.0.0-beta4'
+    implementation 'com.dyhdyh.rxjava:subscribers-loadingbar:1.0.0-beta4'
+    implementation 'com.dyhdyh.loadingbar:loadingbar:1.4.7'
+
     implementation project(':android-gpuimage')
     implementation project(':android-gpuimage-video-support')
+    implementation project(':support-rxjava')
 }
