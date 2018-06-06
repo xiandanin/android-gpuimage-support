@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import com.dyhdyh.gpuimage.support.example.R;
 import com.dyhdyh.gpuimage.support.example.model.FilterModel;
-import com.dyhdyh.helper.checkable.MultipleCheckableAdapter;
-import com.dyhdyh.helper.checkable.MultipleCheckableHelper;
+import com.dyhdyh.helper.checkable.SingleCheckableAdapter;
+import com.dyhdyh.helper.checkable.SingleCheckableHelper;
 import com.gcssloop.widget.CheckedRCRelativeLayout;
 
 import java.util.List;
@@ -20,12 +20,12 @@ import java.util.List;
  * @author dengyuhan
  *         created 2018/3/21 19:16
  */
-public class FilterAdapter extends BaseRecyclerAdapter<FilterModel, RecyclerView.ViewHolder> implements MultipleCheckableAdapter<FilterModel> {
-    private MultipleCheckableHelper mHelper;
+public class FilterAdapter extends BaseRecyclerAdapter<FilterModel, RecyclerView.ViewHolder> implements SingleCheckableAdapter {
+    private SingleCheckableHelper mHelper;
 
     public FilterAdapter(List<FilterModel> data) {
         super(data);
-        this.mHelper = new MultipleCheckableHelper<>(this);
+        this.mHelper = new SingleCheckableHelper(this);
     }
 
     @Override
@@ -56,27 +56,13 @@ public class FilterAdapter extends BaseRecyclerAdapter<FilterModel, RecyclerView
             }
             holder.tvName.setText(item.getFilterNameRes());
             holder.tvProgress.setText(String.valueOf(item.getProgress()));
+
+            boolean showFilterBar = item.isChecked() && item.getAdjuster() != null;
+            holder.iv_filter_bar.setVisibility(showFilterBar ? View.VISIBLE : View.GONE);
         } else {
             HeaderHolder holder = (HeaderHolder) viewHolder;
             holder.tvFilterGroup.setText(item.getFilterGroupNameRes());
         }
-
-    }
-
-
-    @Override
-    public void setCheckedPositionArray(int[] checkedPositionArray, boolean checked) {
-        mHelper.setCheckedPositionArray(checkedPositionArray, checked);
-    }
-
-    @Override
-    public int[] getCheckedPositionArray() {
-        return mHelper.getCheckedPositionArray();
-    }
-
-    @Override
-    public List<FilterModel> getCheckedList() {
-        return mHelper.getCheckedList();
     }
 
     @Override
@@ -94,6 +80,16 @@ public class FilterAdapter extends BaseRecyclerAdapter<FilterModel, RecyclerView
         mHelper.clear();
     }
 
+    @Override
+    public void setCheckedPosition(Integer checkedPosition) {
+        mHelper.setCheckedPosition(checkedPosition);
+    }
+
+    @Override
+    public Integer getCheckedPosition() {
+        return mHelper.getCheckedPosition();
+    }
+
 
     static class HeaderHolder extends RecyclerView.ViewHolder {
         TextView tvFilterGroup;
@@ -109,13 +105,15 @@ public class FilterAdapter extends BaseRecyclerAdapter<FilterModel, RecyclerView
         ImageView ivCover;
         TextView tvName;
         TextView tvProgress;
+        View iv_filter_bar;
 
         public ItemHolder(View itemView) {
             super(itemView);
             rlContainer = itemView.findViewById(R.id.rl_container);
             ivCover = itemView.findViewById(R.id.iv_filter_cover);
             tvName = itemView.findViewById(R.id.tv_filter_name);
-            tvProgress = itemView.findViewById(R.id.tv_filter_progress);
+            tvProgress = itemView.findViewById(R.id.tv_filter_title);
+            iv_filter_bar = itemView.findViewById(R.id.iv_filter_bar);
         }
     }
 }

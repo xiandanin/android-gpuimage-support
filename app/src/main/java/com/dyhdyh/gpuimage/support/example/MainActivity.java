@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements BaseRecyclerAdapt
         mImageView = findViewById(R.id.image);
         mTextureView = findViewById(R.id.texture);
         sb_filter_adjust = findViewById(R.id.sb_filter_adjust);
-        tv_filter_progress = findViewById(R.id.tv_filter_progress);
+        tv_filter_progress = findViewById(R.id.tv_filter_title);
         layout_filter_adjust = findViewById(R.id.layout_filter_adjust);
 
         findViewById(R.id.tv_filter_cancel).setOnClickListener(new View.OnClickListener() {
@@ -90,6 +90,8 @@ public class MainActivity extends AppCompatActivity implements BaseRecyclerAdapt
         mGPUImage = new GPUImage(this);
 
         setVideoSource(null);
+
+        finish();
     }
 
     @Override
@@ -145,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements BaseRecyclerAdapt
 
     public void setFilter(int position, boolean checked) {
         FilterModel item = mFilterAdapter.getItem(position);
-        mFilterAdapter.setCheckedPositionArray(new int[]{position}, checked);
+        //mFilterAdapter.setCheckedPositionArray(new int[]{position}, checked);
         if (checked) {
             if (!mFilterGroup.getFilters().contains(item.getFilter())) {
                 mFilterGroup.addFilter(item.getFilter());

@@ -25,7 +25,6 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.media.ExifInterface;
 import android.media.MediaScannerConnection;
@@ -39,10 +38,15 @@ import android.provider.MediaStore;
 import android.view.Display;
 import android.view.WindowManager;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
-import java.util.concurrent.Semaphore;
+
+import jp.co.cyberagent.android.gpuimage.view.GLTextureView;
 
 /**
  * The main accessor for GPUImage functionality. This class helps to do common
@@ -51,7 +55,7 @@ import java.util.concurrent.Semaphore;
 public class GPUImage {
     private final Context mContext;
     private final GPUImageRenderer mRenderer;
-    private GLSurfaceView mGlSurfaceView;
+    private GLTextureView mGLTextureView;
     private GPUImageFilter mFilter;
     private Bitmap mCurrentBitmap;
     private ScaleType mScaleType = ScaleType.CENTER_CROP;
@@ -90,14 +94,15 @@ public class GPUImage {
      *
      * @param view the GLSurfaceView
      */
-    public void setGLSurfaceView(final GLSurfaceView view) {
-        mGlSurfaceView = view;
-        mGlSurfaceView.setEGLContextClientVersion(2);
-        mGlSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
-        mGlSurfaceView.getHolder().setFormat(PixelFormat.RGBA_8888);
-        mGlSurfaceView.setRenderer(mRenderer);
-        mGlSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-        mGlSurfaceView.requestRender();
+    public void setGLTextureView(final GLTextureView view) {
+        mGLTextureView = view;
+        mGLTextureView.setEGLContextClientVersion(2);
+        mGLTextureView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
+        mGLTextureView.setOpaque(false);
+        //mGLTextureView.getHolder().setFormat(PixelFormat.RGBA_8888);
+        mGLTextureView.setRenderer(mRenderer);
+        mGLTextureView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+        mGLTextureView.requestRender();
     }
 
     /**
@@ -115,8 +120,8 @@ public class GPUImage {
      * Request the preview to be rendered again.
      */
     public void requestRender() {
-        if (mGlSurfaceView != null) {
-            mGlSurfaceView.requestRender();
+        if (mGLTextureView != null) {
+            mGLTextureView.requestRender();
         }
     }
 
@@ -139,7 +144,7 @@ public class GPUImage {
      */
     public void setUpCamera(final Camera camera, final int degrees, final boolean flipHorizontal,
             final boolean flipVertical) {
-        mGlSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+        mGLTextureView.setRenderMode(GLTextureView.RENDERMODE_CONTINUOUSLY);
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
             setUpCameraGingerbread(camera);
         } else {
@@ -279,7 +284,7 @@ public class GPUImage {
      * @return the bitmap with filter applied
      */
     public Bitmap getBitmapWithFilterApplied(final Bitmap bitmap) {
-        if (mGlSurfaceView != null) {
+        if (mGLTextureView != null) {
             mRenderer.deleteImage();
             mRenderer.runOnDraw(new Runnable() {
 
@@ -354,7 +359,7 @@ public class GPUImage {
 
     /**
      * Deprecated: Please use
-     * {@link GPUImageView#saveToPictures(String, String, jp.co.cyberagent.android.gpuimage.GPUImageView.OnPictureSavedListener)}
+     * {@link GPUImageView#saveToPictures(String, String, GPUImageView.OnPictureSavedListener)}
      *
      * Save current image with applied filter to Pictures. It will be stored on
      * the default Picture folder on the phone below the given folderName and
@@ -374,7 +379,7 @@ public class GPUImage {
 
     /**
      * Deprecated: Please use
-     * {@link GPUImageView#saveToPictures(String, String, jp.co.cyberagent.android.gpuimage.GPUImageView.OnPictureSavedListener)}
+     * {@link GPUImageView#saveToPictures(String, String, GPUImageView.OnPictureSavedListener)}
      *
      * Apply and save the given bitmap with applied filter to Pictures. It will
      * be stored on the default Picture folder on the phone below the given

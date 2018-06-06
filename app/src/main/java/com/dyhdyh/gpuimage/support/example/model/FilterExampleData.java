@@ -121,6 +121,16 @@ public class FilterExampleData {
         return list;
     }
 
+    public static List<FilterModel> allNoTitle() {
+        List<FilterModel> list = new ArrayList<>();
+        list.addAll(handleColor());
+        list.addAll(handleImage());
+        list.addAll(visualEffect());
+        list.addAll(blend());
+        list.addAll(custom());
+        return list;
+    }
+
     public static List<FilterModel> handleColor() {
         FilterModel[] filterArray = new FilterModel[]{
                 //调整颜色 Handle Color
@@ -138,7 +148,7 @@ public class FilterExampleData {
                 new FilterModel(R.string.label_filter_rgb, new GPUImageRGBFilter(), new GPUImageRGBAdjuster(), 0),
                 new FilterModel(R.string.label_filter_tone_curve, new GPUImageToneCurveFilter()),
                 new FilterModel(R.string.label_filter_monochrome, new GPUImageMonochromeFilter(), new GPUImageMonochromeAdjuster(), 0),
-                new FilterModel(R.string.label_filter_opacity, new GPUImageOpacityFilter(), new GPUImageOpacityAdjuster(), 0),
+                new FilterModel(R.string.label_filter_opacity, new GPUImageOpacityFilter(), new GPUImageOpacityAdjuster(), 100),
                 new FilterModel(R.string.label_filter_highlight_shadow, new GPUImageHighlightShadowFilter(), new GPUImageHighlightShadowAdjuster(), 0),
                 new FilterModel(R.string.label_filter_false_color, new GPUImageFalseColorFilter()),
                 new FilterModel(R.string.label_filter_hue, new GPUImageHueFilter(), new GPUImageHueAdjuster(), 0),
@@ -215,7 +225,7 @@ public class FilterExampleData {
                 //new FilterModel(R.string.label_filter_color_packing, new GPUImageColorPackingFilter()),
                 new FilterModel(R.string.label_filter_vignette, new GPUImageVignetteFilter(), new GPUImageVignetteAdjuster(), 0),
                 new FilterModel(R.string.label_filter_swirl, new GPUImageSwirlFilter(), new GPUImageSwirlAdjuster(), 0),
-                new FilterModel(R.string.label_filter_bulge_distortion, new GPUImageBulgeDistortionFilter(),new GPUImageBulgeDistortionAdjuster(),0),
+                new FilterModel(R.string.label_filter_bulge_distortion, new GPUImageBulgeDistortionFilter(), new GPUImageBulgeDistortionAdjuster(), 0),
                 //new FilterModel(R.string.label_filter_pinch_distortion, new GPUImagePinchDistortionFilter()),
                 //new FilterModel(R.string.label_filter_stretch_distortion, new GPUImageStretchDistortionFilter()),
                 new FilterModel(R.string.label_filter_glass_sphere, new GPUImageGlassSphereFilter(), new GPUImageGlassSphereAdjuster(), 0),
@@ -252,7 +262,7 @@ public class FilterExampleData {
                 new FilterModel(R.string.label_filter_soft_light_blend, new GPUImageSoftLightBlendFilter()),
                 new FilterModel(R.string.label_filter_chroma_key_blend, new GPUImageChromaKeyBlendFilter()),
                 //new FilterModel(R.string.label_filter_mask, new GPUImageMaskFilter()),
-                new FilterModel(R.string.label_filter_haze, new GPUImageHazeFilter(), new GPUImageHazeAdjuster(), 0),
+                new FilterModel(R.string.label_filter_haze, new GPUImageHazeFilter(), new GPUImageHazeAdjuster(), 50),
                 //new FilterModel(R.string.label_filter_luminance_threshold, new GPUImageLuminanceThresholdFilter()),
                 //new FilterModel(R.string.label_filter_adaptive_threshold, new GPUImageAdaptiveThresholdFilter()),
                 new FilterModel(R.string.label_filter_add_blend, new GPUImageAddBlendFilter()),

@@ -24,7 +24,6 @@ import android.hardware.Camera;
 import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.Size;
 import android.opengl.GLES20;
-import android.opengl.GLSurfaceView.Renderer;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -38,11 +37,12 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import jp.co.cyberagent.android.gpuimage.util.TextureRotationUtil;
+import jp.co.cyberagent.android.gpuimage.view.GLTextureView;
 
 import static jp.co.cyberagent.android.gpuimage.util.TextureRotationUtil.TEXTURE_NO_ROTATION;
 
 @TargetApi(11)
-public class GPUImageRenderer implements Renderer, PreviewCallback {
+public class GPUImageRenderer implements GLTextureView.Renderer, PreviewCallback {
     public static final int NO_IMAGE = -1;
     static final float CUBE[] = {
             -1.0f, -1.0f,
@@ -125,12 +125,17 @@ public class GPUImageRenderer implements Renderer, PreviewCallback {
         }
     }
 
+    @Override
+    public void onSurfaceDestroyed(GL10 gl) {
+        
+    }
+
     /**
      * Sets the background color
      *
-     * @param red   red color value
+     * @param red red color value
      * @param green green color value
-     * @param blue  red color value
+     * @param blue red color value
      */
     public void setBackgroundColor(float red, float green, float blue) {
         mBackgroundRed = red;
@@ -316,7 +321,7 @@ public class GPUImageRenderer implements Renderer, PreviewCallback {
     }
 
     public void setRotationCamera(final Rotation rotation, final boolean flipHorizontal,
-                                  final boolean flipVertical) {
+            final boolean flipVertical) {
         setRotation(rotation, flipVertical, flipHorizontal);
     }
 
