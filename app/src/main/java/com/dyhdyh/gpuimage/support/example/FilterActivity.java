@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +29,7 @@ import com.dyhdyh.subscribers.loadingbar.rxjava2.SimpleLoadingDialogObserver;
 
 import java.io.File;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,7 +42,7 @@ import jp.co.cyberagent.android.gpuimage.adjuster.GPUImageAdjuster;
  * @author dengyuhan
  *         created 2018/6/6 15:49
  */
-public class ExampleActivity extends AppCompatActivity implements BaseRecyclerAdapter.OnItemClickListener<FilterModel> {
+public class FilterActivity extends AppCompatActivity implements BaseRecyclerAdapter.OnItemClickListener<FilterModel> {
     @BindView(R.id.rv_filter)
     RecyclerView rv_filter;
 
@@ -52,6 +54,7 @@ public class ExampleActivity extends AppCompatActivity implements BaseRecyclerAd
 
     private FilterAdapter mFilterAdapter;
     private GPUImageCoverUtil mCoverUtil;
+
     private File inputFile;
 
     @Override
@@ -60,12 +63,29 @@ public class ExampleActivity extends AppCompatActivity implements BaseRecyclerAd
         setContentView(R.layout.activity_example);
         ButterKnife.bind(this);
 
-        inputFile = new File(getExternalCacheDir(), "test.jpg");
-        FileUtils.copyAssetFile(this, "test.jpg", inputFile);
-        texture.setImage(BitmapFactory.decodeFile(inputFile.getAbsolutePath()));
+        boolean isImage;
+        String inputPath = getIntent().getStringExtra("input_path");
+        if (TextUtils.isEmpty(inputPath)) {
+            //没有路径就用测试文件
+            isImage = new Random().nextBoolean();
+            // isImage = false;
+            inputFile = isImage ? new File(getExternalCacheDir(), "test.jpg") :
+                    new File(getExternalCacheDir(), "test.mp4");
+            FileUtils.copyAssetFile(this, inputFile.getName(), inputFile);
+        } else {
+            isImage = inputPath.endsWith("mp4");
+            inputFile = new File(inputPath);
+        }
+
+        if (isImage) {
+            texture.setImage(BitmapFactory.decodeFile(inputFile.getAbsolutePath()));
+        } else {
+            texture.setDataSource(inputFile.getAbsolutePath());
+            texture.start();
+        }
 
         mCoverUtil = new GPUImageCoverUtil(this);
-        mCoverUtil.setSourcePath(true, R.drawable.test, inputFile.getAbsolutePath());
+        mCoverUtil.setSourcePath(isImage, R.drawable.test, inputFile.getAbsolutePath());
 
         setFilterAdapter();
 
@@ -164,11 +184,11 @@ public class ExampleActivity extends AppCompatActivity implements BaseRecyclerAd
                 .outputFilterBitmap(null, GPUImageRxJava2Adapter.<File>create())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleLoadingDialogObserver<File>(this){
+                .subscribe(new SimpleLoadingDialogObserver<File>(this) {
                     @Override
                     public void onNext(File file) {
                         super.onNext(file);
-                        Toast.makeText(ExampleActivity.this, "保存成功->"+file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FilterActivity.this, "保存成功->" + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
