@@ -9,7 +9,6 @@ android {
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -31,10 +30,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation 'com.jakewharton:butterknife:8.4.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
     implementation 'com.dyhdyh.rxjava:subscribers:1.0.0-beta4'
     implementation 'com.dyhdyh.rxjava:subscribers-loadingbar:1.0.0-beta4'
@@ -42,5 +38,5 @@ dependencies {
 
     implementation project(':android-gpuimage')
     implementation project(':android-gpuimage-video-support')
-    implementation project(':support-rxjava')
+    implementation project(':android-gpuimage-rxjava-adapter')
 }

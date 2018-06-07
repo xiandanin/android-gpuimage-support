@@ -11,7 +11,6 @@ import android.widget.FrameLayout;
 
 import jp.co.cyberagent.android.gpuimage.GPUImage;
 import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageView;
 import jp.co.cyberagent.android.gpuimage.view.GLTextureView;
 
 /**
@@ -21,7 +20,6 @@ import jp.co.cyberagent.android.gpuimage.view.GLTextureView;
 public class GPUImageTextureLayout extends FrameLayout {
     private GPUImage mGPUImage;
     private GLTextureView mTextureView;
-    private GPUImageView mGPUImageView;
 
     public GPUImageTextureLayout(@NonNull Context context) {
         this(context, null);
@@ -45,16 +43,11 @@ public class GPUImageTextureLayout extends FrameLayout {
         mTextureView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         mGPUImage.setGLTextureView(mTextureView);
         addView(mTextureView);
-/*
-        mGPUImageView = new GPUImageView(context);
-        mGPUImageView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        mGPUImage = mGPUImageView.getGPUImage();
-        addView(mGPUImageView);*/
 
     }
 
-    public void setImage(Bitmap file) {
-        mGPUImage.setImage(file);
+    public void setImage(Bitmap bitmap) {
+        mGPUImage.setImage(bitmap);
     }
 
     public void setFilter(GPUImageFilter filter) {
