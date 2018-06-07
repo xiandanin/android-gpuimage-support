@@ -2,6 +2,7 @@ package com.dyhdyh.gpuimage.support.example.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -10,6 +11,7 @@ import android.widget.FrameLayout;
 
 import jp.co.cyberagent.android.gpuimage.GPUImage;
 import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
+import jp.co.cyberagent.android.gpuimage.GPUImageView;
 import jp.co.cyberagent.android.gpuimage.view.GLTextureView;
 
 /**
@@ -19,6 +21,7 @@ import jp.co.cyberagent.android.gpuimage.view.GLTextureView;
 public class GPUImageTextureLayout extends FrameLayout {
     private GPUImage mGPUImage;
     private GLTextureView mTextureView;
+    private GPUImageView mGPUImageView;
 
     public GPUImageTextureLayout(@NonNull Context context) {
         this(context, null);
@@ -35,11 +38,18 @@ public class GPUImageTextureLayout extends FrameLayout {
 
     private void initView(Context context) {
         mGPUImage = new GPUImage(context);
+        mGPUImage.setScaleType(GPUImage.ScaleType.CENTER_INSIDE);
+        mGPUImage.setBackgroundColor(Color.WHITE);
 
         mTextureView = new GLTextureView(context);
         mTextureView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         mGPUImage.setGLTextureView(mTextureView);
         addView(mTextureView);
+/*
+        mGPUImageView = new GPUImageView(context);
+        mGPUImageView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        mGPUImage = mGPUImageView.getGPUImage();
+        addView(mGPUImageView);*/
 
     }
 

@@ -153,7 +153,7 @@ public class FilterExampleData {
                 new FilterModel(R.string.label_filter_false_color, new GPUImageFalseColorFilter()),
                 new FilterModel(R.string.label_filter_hue, new GPUImageHueFilter(), new GPUImageHueAdjuster(), 0),
                 //new FilterModel(R.string.label_filter_chroma_key, new GPUImageChromaKeyFilter()),
-                new FilterModel(R.string.label_filter_white_balance, new GPUImageWhiteBalanceFilter(), new GPUImageWhiteBalanceAdjuster(), 0),
+                new FilterModel(R.string.label_filter_white_balance, new GPUImageWhiteBalanceFilter(), new GPUImageWhiteBalanceAdjuster(), 50),
                 //new FilterModel(R.string.label_filter_average_color, new GPUImageAverageColor()),
                 //new FilterModel(R.string.label_filter_solid_color, new GPUImageSolidColorGenerator()),
                 //new FilterModel(R.string.label_filter_luminosity, new GPUImageLuminosity()),

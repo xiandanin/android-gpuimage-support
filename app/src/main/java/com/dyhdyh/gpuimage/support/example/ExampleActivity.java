@@ -1,8 +1,8 @@
 package com.dyhdyh.gpuimage.support.example;
 
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +18,7 @@ import com.dyhdyh.gpuimage.support.example.adapter.FilterAdapter;
 import com.dyhdyh.gpuimage.support.example.model.CoverBitmapModel;
 import com.dyhdyh.gpuimage.support.example.model.FilterExampleData;
 import com.dyhdyh.gpuimage.support.example.model.FilterModel;
+import com.dyhdyh.gpuimage.support.example.util.FileUtils;
 import com.dyhdyh.gpuimage.support.example.util.GPUImageCoverUtil;
 import com.dyhdyh.gpuimage.support.example.view.FilterSeekLayout;
 import com.dyhdyh.gpuimage.support.example.view.GPUImageTextureLayout;
@@ -51,6 +52,7 @@ public class ExampleActivity extends AppCompatActivity implements BaseRecyclerAd
 
     private FilterAdapter mFilterAdapter;
     private GPUImageCoverUtil mCoverUtil;
+    private File inputFile;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,13 +60,15 @@ public class ExampleActivity extends AppCompatActivity implements BaseRecyclerAd
         setContentView(R.layout.activity_example);
         ButterKnife.bind(this);
 
-        final File inputFile = new File(Environment.getExternalStorageDirectory(), "zhuangjia.jpg");
+        inputFile = new File(getExternalCacheDir(), "test.jpg");
+        FileUtils.copyAssetFile(this, "test.jpg", inputFile);
         texture.setImage(BitmapFactory.decodeFile(inputFile.getAbsolutePath()));
 
         mCoverUtil = new GPUImageCoverUtil(this);
         mCoverUtil.setSourcePath(true, R.drawable.test, inputFile.getAbsolutePath());
 
         setFilterAdapter();
+
     }
 
 
@@ -110,7 +114,6 @@ public class ExampleActivity extends AppCompatActivity implements BaseRecyclerAd
             seekLayout.setVisibility(View.GONE);
             setGPUImageFilter(position);
         }
-        clickExportFile(null);
     }
 
     public void showFilterSeekBar(final int position) {
@@ -144,7 +147,7 @@ public class ExampleActivity extends AppCompatActivity implements BaseRecyclerAd
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_example, menu);
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
     /**
@@ -153,8 +156,10 @@ public class ExampleActivity extends AppCompatActivity implements BaseRecyclerAd
      * @param item
      */
     public void clickExportFile(MenuItem item) {
-        File outputFile = new File(getExternalCacheDir(), "filter.png");
+        File outputFile = new File(getExternalCacheDir(), "filter.jpg");
         new GPUImageOutput(texture.getGPUImage())
+                .setOutputFormat(Bitmap.CompressFormat.JPEG)
+                .setQuality(80)
                 .setOutputFile(outputFile)
                 .outputFilterBitmap(null, GPUImageRxJava2Adapter.<File>create())
                 .subscribeOn(Schedulers.io())
