@@ -10,15 +10,14 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.SeekBar;
 import android.widget.Toast;
 
+import com.dyhdyh.gpuimage.support.example.adapter.BaseFilterAdapter;
 import com.dyhdyh.gpuimage.support.example.adapter.BaseRecyclerAdapter;
-import com.dyhdyh.gpuimage.support.example.adapter.FilterAdapter;
-import com.dyhdyh.gpuimage.support.example.model.CoverBitmapModel;
-import com.dyhdyh.gpuimage.support.example.model.FilterExampleData;
-import com.dyhdyh.gpuimage.support.example.model.FilterModel;
+import com.dyhdyh.gpuimage.support.example.adapter.GroupAdapter;
+import com.dyhdyh.gpuimage.support.example.model.FilterGroupExampleData;
+import com.dyhdyh.gpuimage.support.example.model.FilterGroupModel;
+import com.dyhdyh.gpuimage.support.example.model.FilterInfo;
 import com.dyhdyh.gpuimage.support.example.util.FileUtils;
 import com.dyhdyh.gpuimage.support.example.util.GPUImageCoverUtil;
 import com.dyhdyh.gpuimage.support.example.view.FilterSeekLayout;
@@ -34,17 +33,21 @@ import java.util.Random;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import jp.co.cyberagent.android.gpuimage.adjuster.GPUImageAdjuster;
+import jp.co.cyberagent.android.gpuimage.GPUImageBrightnessFilter;
+import jp.co.cyberagent.android.gpuimage.GPUImageFilterGroup;
+import jp.co.cyberagent.android.gpuimage.GPUImageSaturationFilter;
 
 /**
  * @author dengyuhan
  *         created 2018/6/6 15:49
  */
-public class FilterActivity extends AppCompatActivity implements BaseRecyclerAdapter.OnItemClickListener<FilterModel> {
-    @BindView(R.id.rv_filter)
+public class GroupActivity extends AppCompatActivity implements BaseRecyclerAdapter.OnItemClickListener<FilterGroupModel> {
+    @BindView(R.id.rv_filter_group)
     RecyclerView rv_filter;
+
+    @BindView(R.id.rv_base_filter)
+    RecyclerView rv_base_filter;
 
     @BindView(R.id.texture)
     GPUImageTextureLayout texture;
@@ -52,15 +55,17 @@ public class FilterActivity extends AppCompatActivity implements BaseRecyclerAda
     @BindView(R.id.sb_filter)
     FilterSeekLayout seekLayout;
 
-    private FilterAdapter mFilterAdapter;
     private GPUImageCoverUtil mCoverUtil;
 
     private File inputFile;
 
+    private GroupAdapter mGroupAdapter;
+    private BaseFilterAdapter mBaseFilterAdapter;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_example);
+        setContentView(R.layout.activity_group);
         ButterKnife.bind(this);
 
         boolean isImage;
@@ -87,57 +92,51 @@ public class FilterActivity extends AppCompatActivity implements BaseRecyclerAda
         mCoverUtil = new GPUImageCoverUtil(this);
         mCoverUtil.setSourcePath(isImage, R.drawable.test, inputFile.getAbsolutePath());
 
-        setFilterAdapter();
+        setFilterGroupAdapter();
+        setBaseFilterAdapter();
 
     }
 
 
-    /**
-     * 滤镜列表
-     */
-    public void setFilterAdapter() {
-        List<FilterModel> filters;
-        if (mFilterAdapter == null) {
-            filters = FilterExampleData.allNoTitle();
-
-            //((SimpleItemAnimator) rv_filter.getItemAnimator()).setSupportsChangeAnimations(false);
-            mFilterAdapter = new FilterAdapter(filters);
-            mFilterAdapter.setOnItemClickListener(this);
-            rv_filter.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-            rv_filter.setAdapter(mFilterAdapter);
-        } else {
-            filters = mFilterAdapter.getData();
-        }
-        mCoverUtil.asyncBindFilterCover(filters)
-                .subscribe(new Consumer<CoverBitmapModel>() {
-                    @Override
-                    public void accept(CoverBitmapModel bitmap) throws Exception {
-                        mFilterAdapter.getData().get(bitmap.getIndex()).setCoverBitmap(bitmap.getBitmap());
-                        mFilterAdapter.notifyItemChanged(bitmap.getIndex());
-                    }
-                });
+    public void setFilterGroupAdapter() {
+        final List<FilterGroupModel> groups = FilterGroupExampleData.all();
+        mGroupAdapter = new GroupAdapter(groups);
+        mGroupAdapter.setOnItemClickListener(this);
+        rv_filter.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        rv_filter.setAdapter(mGroupAdapter);
     }
 
-    private void setGPUImageFilter(int position) {
-        final FilterModel item = mFilterAdapter.getItem(position);
-        mFilterAdapter.setCheckedPosition(position);
-        texture.setFilter(item.getFilter());
+    public void setBaseFilterAdapter() {
+        final List<FilterInfo> filtes = FilterGroupExampleData.baseFilters();
+        mBaseFilterAdapter = new BaseFilterAdapter(filtes);
+        //mBaseFilterAdapter.setOnItemClickListener(this);
+        rv_base_filter.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        rv_base_filter.setAdapter(mBaseFilterAdapter);
     }
 
     @Override
-    public void onItemClick(BaseRecyclerAdapter recyclerAdapter, int position, FilterModel item) {
-        //如果有调整器 并且已经选中
-        boolean showFilterBar = item.isChecked() && item.getAdjuster() != null;
-        if (showFilterBar) {
-            showFilterSeekBar(position);
-        } else {
-            seekLayout.setVisibility(View.GONE);
-            setGPUImageFilter(position);
-        }
+    public void onItemClick(BaseRecyclerAdapter adapter, int position, FilterGroupModel item) {
+        setGPUImageFilter(position);
     }
 
+    private void setGPUImageFilter(int position) {
+        final FilterGroupModel item = mGroupAdapter.getItem(position);
+        mGroupAdapter.setCheckedPosition(position);
+        GPUImageFilterGroup group = new GPUImageFilterGroup();
+        if (item.getBrightness() != null) {
+            final FilterInfo info = item.getBrightness();
+            group.addFilter(new GPUImageBrightnessFilter(info.getDefaultValue()));
+        }
+        if (item.getSaturation() != null) {
+            final FilterInfo info = item.getSaturation();
+            group.addFilter(new GPUImageSaturationFilter(info.getDefaultValue()));
+        }
+        texture.setFilter(group);
+    }
+
+
     public void showFilterSeekBar(final int position) {
-        final FilterModel item = mFilterAdapter.getItem(position);
+        /*final FilterModel item = mFilterAdapter.getItem(position);
         seekLayout.setVisibility(View.VISIBLE);
         seekLayout.setFilterTitle(getResources().getString(item.getFilterNameRes()));
         seekLayout.setProgress(item.getProgress());
@@ -161,7 +160,7 @@ public class FilterActivity extends AppCompatActivity implements BaseRecyclerAda
             public void onStopTrackingTouch(SeekBar seekBar) {
 
             }
-        });
+        });*/
     }
 
     @Override
@@ -188,8 +187,9 @@ public class FilterActivity extends AppCompatActivity implements BaseRecyclerAda
                     @Override
                     public void onNext(File file) {
                         super.onNext(file);
-                        Toast.makeText(FilterActivity.this, "保存成功->" + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(GroupActivity.this, "保存成功->" + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
+
 }
