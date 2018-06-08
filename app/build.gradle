@@ -39,6 +39,6 @@ dependencies {
     implementation 'com.dyhdyh.loadingbar:loadingbar:1.4.7'
 
     implementation project(':android-gpuimage')
-    implementation project(':android-gpuimage-video-support')
-    implementation project(':android-gpuimage-rxjava-adapter')
+    implementation project(':video-support')
+    implementation project(':rxjava-adapter')
 }

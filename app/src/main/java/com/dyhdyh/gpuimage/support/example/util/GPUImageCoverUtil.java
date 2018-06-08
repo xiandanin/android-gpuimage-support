@@ -4,8 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
-import android.net.Uri;
-import android.text.TextUtils;
 
 import com.dyhdyh.gpuimage.support.example.R;
 import com.dyhdyh.gpuimage.support.example.model.CoverBitmapModel;
@@ -27,7 +25,6 @@ import jp.co.cyberagent.android.gpuimage.GPUImage;
 public class GPUImageCoverUtil {
     private Context mContext;
     private boolean mImage;
-    private int mTestResId;
     private String mSourcePath;
 
     public GPUImageCoverUtil(Context context) {
@@ -35,9 +32,8 @@ public class GPUImageCoverUtil {
     }
 
 
-    public void setSourcePath(boolean image, int testResId, String sourcePath) {
+    public void setSourcePath(boolean image, String sourcePath) {
         this.mImage = image;
-        this.mTestResId = testResId;
         this.mSourcePath = sourcePath;
     }
 
@@ -52,14 +48,10 @@ public class GPUImageCoverUtil {
         Bitmap bitmap;
         //如果没有路径就使用测试文件
         if (mImage) {
-            bitmap = TextUtils.isEmpty(mSourcePath) ? BitmapFactory.decodeResource(mContext.getResources(), mTestResId) : BitmapFactory.decodeFile(mSourcePath);
+            bitmap = BitmapFactory.decodeFile(mSourcePath);
         } else {
             final MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-            if (TextUtils.isEmpty(mSourcePath)) {
-                retriever.setDataSource(mContext, Uri.parse("android.resource://" + mContext.getPackageName() + "/" + mTestResId));
-            } else {
-                retriever.setDataSource(mSourcePath);
-            }
+            retriever.setDataSource(mSourcePath);
             bitmap = retriever.getFrameAtTime();
         }
         return Bitmap.createScaledBitmap(bitmap, width, height, true);

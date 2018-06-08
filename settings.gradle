@@ -1,1 +1,1 @@
-include ':app', ':android-gpuimage', ':android-gpuimage-video-support', ':android-gpuimage-rxjava-adapter'
+include ':app', ':android-gpuimage', ':video-support', ':rxjava-adapter'

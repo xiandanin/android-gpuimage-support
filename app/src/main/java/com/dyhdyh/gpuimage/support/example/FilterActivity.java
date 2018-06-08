@@ -89,7 +89,7 @@ public class FilterActivity extends AppCompatActivity implements BaseRecyclerAda
         }
 
         mCoverUtil = new GPUImageCoverUtil(this);
-        mCoverUtil.setSourcePath(testImage, R.drawable.test, inputFile.getAbsolutePath());
+        mCoverUtil.setSourcePath(testImage, inputFile.getAbsolutePath());
 
         setFilterAdapter();
 
@@ -242,7 +242,7 @@ public class FilterActivity extends AppCompatActivity implements BaseRecyclerAda
         //从相册选择了图片或者视频
         if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
             String source = Matisse.obtainPathResult(data).get(0);
-            if (TextUtils.isEmpty(source)){
+            if (TextUtils.isEmpty(source)) {
                 Toast.makeText(this, "选择的是路径是空的", Toast.LENGTH_SHORT).show();
                 return;
             }
