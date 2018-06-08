@@ -84,7 +84,7 @@ bintray {
     configurations = ['archives']
     pkg {
         repo = "maven"
-        name = rootProject.ext.jcenter.name
+        name = rootProject.ext.jcenter.name_video_support
         websiteUrl = rootProject.ext.jcenter.siteUrl
         vcsUrl = rootProject.ext.jcenter.gitUrl
         licenses = [rootProject.ext.jcenter.licenseName]

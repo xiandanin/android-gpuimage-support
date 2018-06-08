@@ -3,40 +3,42 @@ ext {
             [
                     //版本号
                     versionCode      : 1,
-                    versionName      : "1.0.0",
+                    versionName      : "1.0.0-beta",
 
                     //sdk版本
-                    compileSdkVersion: 26,
-                    buildToolsVersion: "26.0.2",
-                    minSdkVersion    : 14,
-                    targetSdkVersion : 26,
-                    supportVersion   : "26.1.0",
+                    compileSdkVersion: 27,
+                    buildToolsVersion: "27.0.3",
+                    minSdkVersion    : 19,
+                    targetSdkVersion : 27,
+                    supportVersion   : "27.1.1",
             ]
 
     jcenter =
             [
                     //项目名称
-                    name       : "jcenter-example",
-                    groupId    : "com.dyhdyh.example",
+                    name               : "android-gpuimage",
+                    name_rxjava_adapter: "android-gpuimage-rxjava-adapter",
+                    name_video_support : "android-gpuimage-video-support",
+                    groupId            : "com.dyhdyh.gpuimage",
                     //项目地址
-                    siteUrl    : "https://github.com/dengyuhan/instagram-login-android",
+                    siteUrl            : "https://github.com/dengyuhan/android-gpuimage-support",
                     //项目git地址
-                    gitUrl     : "https://github.com/dengyuhan/instagram-login-android.git",
+                    gitUrl             : "https://github.com/dengyuhan/android-gpuimage-support.git",
                     //项目描述
-                    description: "上传项目到jcenter的示例",
+                    description        : "基于android-gpuimage增加了一些扩展",
                     //开发者的一些基本信息
-                    authorId   : "dengyuhan",
-                    authorName : "dengyuhan",
-                    authorEmail: "22309946@qq.com",
+                    authorId           : "dengyuhan",
+                    authorName         : "dengyuhan",
+                    authorEmail        : "22309946@qq.com",
 
                     //开源协议
-                    licenses   : {
+                    licenses           : {
                         license {
-                            name 'MIT'
-                            url 'https://opensource.org/licenses/MIT'
+                            name 'Apache-2.0'
+                            url 'https://opensource.org/licenses/Apache-2.0'
                         }
                     },
-                    licenseName: 'MIT'
+                    licenseName        : 'Apache-2.0'
             ]
 
 
