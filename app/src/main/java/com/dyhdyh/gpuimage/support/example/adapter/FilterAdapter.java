@@ -67,7 +67,7 @@ public class FilterAdapter extends BaseRecyclerAdapter<FilterModel, RecyclerView
 
     @Override
     public void onAdapterNotifyChanged(int[] checkedPositionArray) {
-        notifyDataSetChanged();
+        notifyItemChanged(checkedPositionArray[0]);
     }
 
     @Override

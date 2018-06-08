@@ -1,9 +1,14 @@
 package com.dyhdyh.gpuimage.support.example;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,10 +31,12 @@ import com.dyhdyh.gpuimage.support.example.view.GPUImageTextureLayout;
 import com.dyhdyh.gpuimage.support.rxjava2.GPUImageOutput;
 import com.dyhdyh.gpuimage.support.rxjava2.GPUImageRxJava2Adapter;
 import com.dyhdyh.subscribers.loadingbar.rxjava2.SimpleLoadingDialogObserver;
+import com.zhihu.matisse.Matisse;
+import com.zhihu.matisse.MimeType;
+import com.zhihu.matisse.engine.impl.GlideEngine;
 
 import java.io.File;
 import java.util.List;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,6 +50,7 @@ import jp.co.cyberagent.android.gpuimage.adjuster.GPUImageAdjuster;
  *         created 2018/6/6 15:49
  */
 public class FilterActivity extends AppCompatActivity implements BaseRecyclerAdapter.OnItemClickListener<FilterModel> {
+    private static final int REQUEST_CODE_CHOOSE = 100;
     @BindView(R.id.rv_filter)
     RecyclerView rv_filter;
 
@@ -63,29 +71,25 @@ public class FilterActivity extends AppCompatActivity implements BaseRecyclerAda
         setContentView(R.layout.activity_example);
         ButterKnife.bind(this);
 
-        boolean isImage;
         String inputPath = getIntent().getStringExtra("input_path");
+        boolean testImage = getIntent().getBooleanExtra("test_image", true);
         if (TextUtils.isEmpty(inputPath)) {
             //没有路径就用测试文件
-            isImage = new Random().nextBoolean();
-            isImage = true;
-            inputFile = isImage ? new File(getExternalCacheDir(), "test.jpg") :
+            inputFile = testImage ? new File(getExternalCacheDir(), "test.jpg") :
                     new File(getExternalCacheDir(), "test.mp4");
             FileUtils.copyAssetFile(this, inputFile.getName(), inputFile);
         } else {
-            isImage = inputPath.endsWith("mp4");
+            testImage = !inputPath.endsWith("mp4");
             inputFile = new File(inputPath);
         }
 
-        if (isImage) {
-            texture.setImage(BitmapFactory.decodeFile(inputFile.getAbsolutePath()));
-        } else {
-            /*texture.setDataSource(inputFile.getAbsolutePath());
-            texture.start();*/
+        texture.setDataSource(inputFile.getAbsolutePath());
+        if (!testImage) {
+            texture.start();
         }
 
         mCoverUtil = new GPUImageCoverUtil(this);
-        mCoverUtil.setSourcePath(isImage, R.drawable.test, inputFile.getAbsolutePath());
+        mCoverUtil.setSourcePath(testImage, R.drawable.test, inputFile.getAbsolutePath());
 
         setFilterAdapter();
 
@@ -171,6 +175,45 @@ public class FilterActivity extends AppCompatActivity implements BaseRecyclerAda
     }
 
     /**
+     * 测试视频
+     *
+     * @param item
+     */
+    public void clickTestVideo(MenuItem item) {
+        startFilterActivity(false);
+    }
+
+    /**
+     * 测试图片
+     *
+     * @param item
+     */
+    public void clickTestImage(MenuItem item) {
+        startFilterActivity(true);
+    }
+
+    /**
+     * 从相册选择
+     *
+     * @param item
+     */
+    public void clickAlbum(MenuItem item) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+            return;
+        }
+        Matisse.from(this)
+                .choose(MimeType.of(MimeType.JPEG, MimeType.PNG, MimeType.BMP, MimeType.MP4))
+                .countable(false)
+                .spanCount(3)
+                .maxSelectable(1)
+                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+                .imageEngine(new GlideEngine())
+                .forResult(REQUEST_CODE_CHOOSE);
+    }
+
+    /**
      * 导出文件
      *
      * @param item
@@ -191,5 +234,33 @@ public class FilterActivity extends AppCompatActivity implements BaseRecyclerAda
                         Toast.makeText(FilterActivity.this, "保存成功->" + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //从相册选择了图片或者视频
+        if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
+            String source = Matisse.obtainPathResult(data).get(0);
+            if (TextUtils.isEmpty(source)){
+                Toast.makeText(this, "选择的是路径是空的", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            startFilterActivity(source);
+        }
+    }
+
+    private void startFilterActivity(String source) {
+        Intent intent = new Intent(this, FilterActivity.class);
+        intent.putExtra("input_path", source);
+        startActivity(intent);
+        finish();
+    }
+
+    private void startFilterActivity(boolean image) {
+        Intent intent = new Intent(this, FilterActivity.class);
+        intent.putExtra("test_image", image);
+        startActivity(intent);
+        finish();
     }
 }

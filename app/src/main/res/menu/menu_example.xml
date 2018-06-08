@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:onClick="clickTestImage"
+        android:title="测试图片" />
+    <item
+        android:onClick="clickTestVideo"
+        android:title="测试视频" />
+    <item
+        android:onClick="clickAlbum"
+        android:title="相册" />
+    <item
         android:onClick="clickExportFile"
         android:title="导出" />
 </menu>

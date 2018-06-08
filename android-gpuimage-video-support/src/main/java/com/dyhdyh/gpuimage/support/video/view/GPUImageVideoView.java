@@ -1,4 +1,4 @@
-package com.dyhdyh.gpuimage.support.example.view;
+package com.dyhdyh.gpuimage.support.video.view;
 
 import android.content.Context;
 import android.graphics.SurfaceTexture;
@@ -6,10 +6,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.TextureView;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import com.dyhdyh.gpuimage.support.video.render.RenderHandler;
 import com.dyhdyh.gpuimage.support.video.render.RenderThread;
@@ -20,50 +17,38 @@ import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
 
 /**
  * @author dengyuhan
- *         created 2018/3/19 14:21
+ *         created 2018/6/8 10:14
  */
-public class GPUImageTextureView extends FrameLayout implements TextureView.SurfaceTextureListener {
-    private static final String TAG = "GPUImageTextureView";
+public class GPUImageVideoView extends TextureView implements TextureView.SurfaceTextureListener {
 
-    private TextureView mTextureView;
+    private final String TAG = "GPUImageVideoView";
+
     private MediaPlayer mMediaPlayer;
     private RenderThread mRenderThread;
 
-    public GPUImageTextureView(Context context) {
-        super(context);
-        initView(context);
+    public GPUImageVideoView(Context context) {
+        this(context, null);
     }
 
-    public GPUImageTextureView(Context context, AttributeSet attrs) {
+    public GPUImageVideoView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initView(context);
+        initView();
     }
 
-    public GPUImageTextureView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        initView(context);
-    }
 
-    private void initView(Context context) {
+    private void initView() {
         if (mMediaPlayer == null) {
             mMediaPlayer = new MediaPlayer();
             mMediaPlayer.setLooping(true);
         }
 
         mRenderThread = new RenderThread();
-        mRenderThread.setName("TexFromCam Render");
+        mRenderThread.setName("RenderThread");
         mRenderThread.start();
         mRenderThread.waitUntilReady();
 
-        mTextureView = new TextureView(context);
-        mTextureView.setSurfaceTextureListener(this);
+        this.setSurfaceTextureListener(this);
         mRenderThread.setMediaPlayer(mMediaPlayer);
-
-        LayoutParams params = new LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                Gravity.CENTER);
-        addView(mTextureView, 0, params);
     }
 
     public void setDataSource(String path) {
@@ -129,6 +114,13 @@ public class GPUImageTextureView extends FrameLayout implements TextureView.Surf
 
     }
 
+    public void setFilter(GPUImageFilter filter) {
+        if (mRenderThread != null) {
+            RenderHandler rh = mRenderThread.getHandler();
+            rh.sendSetFilter(filter);
+        }
+    }
+
     public void pause() {
         mMediaPlayer.pause();
     }
@@ -153,11 +145,7 @@ public class GPUImageTextureView extends FrameLayout implements TextureView.Surf
         mMediaPlayer.release();
     }
 
-    public void setFilter(GPUImageFilter filter) {
-        if (mRenderThread != null) {
-            RenderHandler rh = mRenderThread.getHandler();
-            rh.sendSetFilter(filter);
-        }
+    public Object getGPUImage() {
+        return mRenderThread;
     }
-
 }

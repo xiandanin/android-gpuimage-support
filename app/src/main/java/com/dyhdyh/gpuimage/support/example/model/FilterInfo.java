@@ -14,12 +14,15 @@ public class FilterInfo {
     private String name;
     private float defaultValue;
 
-    public FilterInfo(GPUImageFilter filter, String name, float min, float max, float defaultValue) {
-        this.filter = filter;
+    public FilterInfo(String name, GPUImageFilter filter, float min, float max) {
         this.name = name;
+        this.filter = filter;
         this.min = min;
         this.max = max;
-        this.defaultValue = defaultValue;
+    }
+
+    public float range() {
+        return (max - min) * progress + min;
     }
 
     public GPUImageFilter getFilter() {

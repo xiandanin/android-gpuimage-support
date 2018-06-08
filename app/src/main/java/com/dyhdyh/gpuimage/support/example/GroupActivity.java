@@ -1,14 +1,11 @@
 package com.dyhdyh.gpuimage.support.example;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -68,29 +65,13 @@ public class GroupActivity extends AppCompatActivity implements BaseRecyclerAdap
         setContentView(R.layout.activity_group);
         ButterKnife.bind(this);
 
-        boolean isImage;
-        String inputPath = getIntent().getStringExtra("input_path");
-        if (TextUtils.isEmpty(inputPath)) {
-            //没有路径就用测试文件
-            isImage = new Random().nextBoolean();
-            isImage = true;
-            inputFile = isImage ? new File(getExternalCacheDir(), "test.jpg") :
-                    new File(getExternalCacheDir(), "test.mp4");
-            FileUtils.copyAssetFile(this, inputFile.getName(), inputFile);
-        } else {
-            isImage = inputPath.endsWith("mp4");
-            inputFile = new File(inputPath);
-        }
-
-        if (isImage) {
-            texture.setImage(BitmapFactory.decodeFile(inputFile.getAbsolutePath()));
-        } else {
-            /*texture.setDataSource(inputFile.getAbsolutePath());
-            texture.start();*/
-        }
+        inputFile = new File(getExternalCacheDir(), "test.jpg");
+        FileUtils.copyAssetFile(this, inputFile.getName(), inputFile);
 
         mCoverUtil = new GPUImageCoverUtil(this);
-        mCoverUtil.setSourcePath(isImage, R.drawable.test, inputFile.getAbsolutePath());
+        mCoverUtil.setSourcePath(true, R.drawable.test, inputFile.getAbsolutePath());
+
+        texture.setDataSource(inputFile.getAbsolutePath());
 
         setFilterGroupAdapter();
         setBaseFilterAdapter();
@@ -125,13 +106,18 @@ public class GroupActivity extends AppCompatActivity implements BaseRecyclerAdap
         GPUImageFilterGroup group = new GPUImageFilterGroup();
         if (item.getBrightness() != null) {
             final FilterInfo info = item.getBrightness();
-            group.addFilter(new GPUImageBrightnessFilter(info.getDefaultValue()));
+            group.addFilter(new GPUImageBrightnessFilter(info.range()));
         }
         if (item.getSaturation() != null) {
             final FilterInfo info = item.getSaturation();
-            group.addFilter(new GPUImageSaturationFilter(info.getDefaultValue()));
+            group.addFilter(new GPUImageSaturationFilter(info.range()));
         }
         texture.setFilter(group);
+        final List<FilterInfo> data = mBaseFilterAdapter.getData();
+        for (FilterInfo info : data) {
+            info.setProgress(new Random().nextFloat());
+        }
+        mBaseFilterAdapter.notifyItemRangeChanged(0, data.size(), true);
     }
 
 
@@ -163,11 +149,6 @@ public class GroupActivity extends AppCompatActivity implements BaseRecyclerAdap
         });*/
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_example, menu);
-        return true;
-    }
 
     /**
      * 导出文件

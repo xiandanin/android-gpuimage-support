@@ -72,14 +72,12 @@ public class GPUImageCoverUtil {
      * @return
      */
     public Observable<CoverBitmapModel> asyncBindFilterCover(final List<FilterModel> filters) {
+        final GPUImage gpuImage = new GPUImage(mContext);
         return Observable.create(new ObservableOnSubscribe<CoverBitmapModel>() {
             @Override
             public void subscribe(ObservableEmitter<CoverBitmapModel> emitter) throws Exception {
                 try {
                     Bitmap srcBitmap = getSrcBitmap();
-
-                    GPUImage gpuImage = new GPUImage(mContext);
-
                     for (int i = 0; i < filters.size(); i++) {
                         FilterModel filter = filters.get(i);
                         if (filter.getFilter() != null) {
@@ -88,11 +86,11 @@ public class GPUImageCoverUtil {
                             emitter.onNext(new CoverBitmapModel(i, filterBitmap));
                         }
                     }
-                    emitter.onComplete();
                 } catch (Exception e) {
                     e.printStackTrace();
                     emitter.onError(e);
                 }
+                emitter.onComplete();
             }
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
