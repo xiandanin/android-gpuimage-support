@@ -20,7 +20,7 @@
     <string name="label_filter_tone_curve">色调曲线</string>
     <string name="label_filter_monochrome">单色</string>
     <string name="label_filter_opacity">不透明度</string>
-    <string name="label_filter_highlight_shadow">提亮阴影</string>
+    <string name="label_filter_highlight_shadow">阴影和高光</string>
     <string name="label_filter_false_color">色彩替换</string>
     <string name="label_filter_hue">色度</string>
     <string name="label_filter_chroma_key">色度键</string>
