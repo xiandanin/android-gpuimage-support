@@ -19,6 +19,13 @@ package jp.co.cyberagent.android.gpuimage.util;
 import jp.co.cyberagent.android.gpuimage.Rotation;
 
 public class TextureRotationUtil {
+    // matches the standard CUBE definition so no flip occurs
+    public static final float TEXTURE_CUBE[] = {
+            0.0f, 0.0f,
+            1.0f, 0.0f,
+            0.0f, 1.0f,
+            1.0f, 1.0f,
+    };
 
     public static final float TEXTURE_NO_ROTATION[] = {
             0.0f, 1.0f,

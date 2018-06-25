@@ -16,14 +16,14 @@
 
 package jp.co.cyberagent.android.gpuimage;
 
-import java.nio.IntBuffer;
-
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.hardware.Camera.Size;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.util.Log;
+
+import java.nio.IntBuffer;
 
 public class OpenGlUtils {
     public static final int NO_TEXTURE = -1;
@@ -134,8 +134,62 @@ public class OpenGlUtils {
         return iProgId;
     }
 
+
     public static float rnd(final float min, final float max) {
         float fRandNum = (float) Math.random();
         return min + (max - min) * fRandNum;
+    }
+
+
+    public static void createFrameBuffers(int width, int height, int count, int[] frameBuffers, int[] textures) {
+        for (int i = 0; i < count; i++) {
+            GLES20.glGenFramebuffers(1, frameBuffers, i);
+            GLES20.glGenTextures(1, textures, i);
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[i]);
+            GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, width, height, 0,
+                    GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, null);
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
+                    GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
+                    GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
+                    GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
+                    GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
+
+            GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, frameBuffers[i]);
+            GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0,
+                    GLES20.GL_TEXTURE_2D, textures[i], 0);
+
+            int status = GLES20.glCheckFramebufferStatus(GLES20.GL_FRAMEBUFFER);
+            if (status != GLES20.GL_FRAMEBUFFER_COMPLETE)
+                throw new RuntimeException("incomplete framebuffer");
+
+            //Log.d(TAG, String.format("created a texture:%d", textures[i]));
+            //Log.d(TAG, String.format("created a framebuffer:%d", frameBuffers[i]));
+
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
+            GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+        }
+    }
+
+    public static void destroyFrameBuffers(int[] frameBufferTextures, int[] frameBuffers) {
+        if (frameBufferTextures != null) {
+            /*
+            for (int id : frameBufferTextures)
+                Log.d(TAG, String.format("deleted texture:%d", id));
+            */
+
+            GLES20.glDeleteTextures(frameBufferTextures.length, frameBufferTextures, 0);
+        }
+
+        if (frameBuffers != null) {
+            /*
+            for(int id : frameBuffers)
+                Log.d(TAG, String.format("deleted framebuffer:%d", id));
+            */
+
+            GLES20.glDeleteFramebuffers(frameBuffers.length, frameBuffers, 0);
+        }
     }
 }
