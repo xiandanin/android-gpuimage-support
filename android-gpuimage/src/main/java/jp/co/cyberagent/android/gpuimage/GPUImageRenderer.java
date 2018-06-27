@@ -349,6 +349,18 @@ public class GPUImageRenderer implements GLTextureView.Renderer, PreviewCallback
         return mFlipVertical;
     }
 
+    public float getBackgroundRed() {
+        return mBackgroundRed;
+    }
+
+    public float getBackgroundGreen() {
+        return mBackgroundGreen;
+    }
+
+    public float getBackgroundBlue() {
+        return mBackgroundBlue;
+    }
+
     protected void runOnDraw(final Runnable runnable) {
         synchronized (mRunOnDraw) {
             mRunOnDraw.add(runnable);

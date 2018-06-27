@@ -213,6 +213,10 @@ public class GPUImage {
         requestRender();
     }
 
+    public ScaleType getScaleType() {
+        return mScaleType;
+    }
+
     /**
      * Sets the rotation of the displayed image.
      *
@@ -436,6 +440,16 @@ public class GPUImage {
             Display display = windowManager.getDefaultDisplay();
             return display.getHeight();
         }
+    }
+
+    @Override
+    public GPUImage clone() {
+        GPUImage gpuImage = new GPUImage(mContext);
+        gpuImage.setScaleType(mScaleType);
+        gpuImage.setRotation(mRenderer.getRotation(), mRenderer.isFlippedHorizontally(), mRenderer.isFlippedVertically());
+        gpuImage.setBackgroundColor(mRenderer.getBackgroundRed(), mRenderer.getBackgroundGreen(), mRenderer.getBackgroundBlue());
+        gpuImage.setImage(mCurrentBitmap);
+        return gpuImage;
     }
 
     @Deprecated

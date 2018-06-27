@@ -133,7 +133,7 @@ public class GPUImageFilterGroup extends GPUImageFilter {
     @Override
     public synchronized void onOutputSizeChanged(final int width, final int height) {
 
-        if(width == mOutputWidth && height == mOutputHeight &&
+        if (width == mOutputWidth && height == mOutputHeight &&
                 mFrameBuffers != null && mFrameBuffers.length == mMergedFilters.size() &&
                 mFrameBufferTextures != null && mFrameBufferTextures.length == mMergedFilters.size()) {
 
@@ -204,24 +204,28 @@ public class GPUImageFilterGroup extends GPUImageFilter {
             int size = mMergedFilters.size();
             int previousTexture = textureId;
             for (int i = 0; i < size; i++) {
-                GPUImageFilter filter = mMergedFilters.get(i);
-                boolean isNotLast = i < size - 1;
-                if (isNotLast) {
-                    GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, mFrameBuffers[i]);
-                } else {
-                    GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, currentFBO[0]);
-                }
+                try {
+                    GPUImageFilter filter = mMergedFilters.get(i);
+                    boolean isNotLast = i < size - 1;
+                    if (isNotLast) {
+                        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, mFrameBuffers[i]);
+                    } else {
+                        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, currentFBO[0]);
+                    }
 
-                if (i == 0) {
-                    filter.onDraw(previousTexture, cubeBuffer, textureBuffer);
-                } else if (i == size - 1) {
-                    filter.onDraw(previousTexture, mGLCubeBuffer, mGLTextureBuffer);
-                } else {
-                    filter.onDraw(previousTexture, mGLCubeBuffer, mGLTextureBuffer);
-                }
+                    if (i == 0) {
+                        filter.onDraw(previousTexture, cubeBuffer, textureBuffer);
+                    } else if (i == size - 1) {
+                        filter.onDraw(previousTexture, mGLCubeBuffer, mGLTextureBuffer);
+                    } else {
+                        filter.onDraw(previousTexture, mGLCubeBuffer, mGLTextureBuffer);
+                    }
 
-                if (isNotLast && mFrameBufferTextures != null && mFrameBufferTextures.length > 0) {
-                    previousTexture = mFrameBufferTextures[i];
+                    if (isNotLast && mFrameBufferTextures != null && mFrameBufferTextures.length > 0) {
+                        previousTexture = mFrameBufferTextures[i];
+                    }
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    e.printStackTrace();
                 }
             }
         }

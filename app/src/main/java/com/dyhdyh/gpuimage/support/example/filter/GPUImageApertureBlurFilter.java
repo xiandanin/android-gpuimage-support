@@ -6,7 +6,8 @@ import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageTwoPassTextureSamplingFilter;
 
 /**
- * 光圈模糊
+ * 光圈模糊 0 - 100
+ *
  * @author dengyuhan
  *         created 2018/3/20 16:05
  */
@@ -81,15 +82,21 @@ public class GPUImageApertureBlurFilter extends GPUImageTwoPassTextureSamplingFi
     private float[] excludeCirclePoint;
     private float excludeBlurSize;
     private float aspectRatio;
-    protected float mBlurSize = 1f;
+    private int mBlurSize;
 
     private int excludeCircleRadiusLocation;
     private int excludeCirclePointLocation;
     private int excludeBlurSizeLocation;
     private int aspectRatioLocation;
 
+
     public GPUImageApertureBlurFilter() {
+        this(0);
+    }
+
+    public GPUImageApertureBlurFilter(int blurSize) {
         super(VERTEX_SHADER, FRAGMENT_SHADER, VERTEX_SHADER, FRAGMENT_SHADER);
+        this.mBlurSize = blurSize;
     }
 
     @Override
@@ -106,20 +113,24 @@ public class GPUImageApertureBlurFilter extends GPUImageTwoPassTextureSamplingFi
         excludeCirclePointLocation = GLES20.glGetUniformLocation(filter.getProgram(), "excludeCirclePoint");
         excludeBlurSizeLocation = GLES20.glGetUniformLocation(filter.getProgram(), "excludeBlurSize");
         aspectRatioLocation = GLES20.glGetUniformLocation(filter.getProgram(), "aspectRatio");
-        setExcludeCircleRadius(filter,0.3f);
-        setExcludeCirclePoint(filter,new float[]{0.5f, 0.5f});
-        setExcludeBlurSize(filter,0.15f);
-        setAspectRatio(filter,1f);
+        setExcludeCircleRadius(filter, 100.0f / 320.0f);
+        setExcludeCirclePoint(filter, new float[]{0.5f, 0.5f});
+        setExcludeBlurSize(filter, 0f);
+        setAspectRatio(filter, 1f);
 
         filter = mFilters.get(1);
         excludeCircleRadiusLocation = GLES20.glGetUniformLocation(filter.getProgram(), "excludeCircleRadius");
         excludeCirclePointLocation = GLES20.glGetUniformLocation(filter.getProgram(), "excludeCirclePoint");
         excludeBlurSizeLocation = GLES20.glGetUniformLocation(filter.getProgram(), "excludeBlurSize");
         aspectRatioLocation = GLES20.glGetUniformLocation(filter.getProgram(), "aspectRatio");
-        setExcludeCircleRadius(filter,0.3f);
-        setExcludeCirclePoint(filter,new float[]{0.5f, 0.5f});
-        setExcludeBlurSize(filter,0.15f);
-        setAspectRatio(filter,1f);
+        setExcludeCircleRadius(filter, 100.0f / 320.0f);
+        setExcludeCirclePoint(filter, new float[]{0.5f, 0.5f});
+        setExcludeBlurSize(filter, 0f);
+        setAspectRatio(filter, 1f);
+    }
+
+    private float getRawBlurSize() {
+        return (float) mBlurSize / 100;
     }
 
     @Override
@@ -148,8 +159,8 @@ public class GPUImageApertureBlurFilter extends GPUImageTwoPassTextureSamplingFi
         filter.setFloat(aspectRatioLocation, aspectRatio);
     }
 
-    public void setBlurSize(float mBlurSize) {
-        this.mBlurSize = mBlurSize;
+    public void setBlurSize(int blurSize) {
+        this.mBlurSize = blurSize;
         runOnDraw(new Runnable() {
             @Override
             public void run() {
@@ -160,11 +171,11 @@ public class GPUImageApertureBlurFilter extends GPUImageTwoPassTextureSamplingFi
 
     @Override
     public float getVerticalTexelOffsetRatio() {
-        return mBlurSize;
+        return getRawBlurSize();
     }
 
     @Override
     public float getHorizontalTexelOffsetRatio() {
-        return mBlurSize;
+        return getRawBlurSize();
     }
 }

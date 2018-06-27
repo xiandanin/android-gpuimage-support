@@ -43,6 +43,7 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
 import jp.co.cyberagent.android.gpuimage.adjuster.GPUImageAdjuster;
 
 /**
@@ -65,6 +66,8 @@ public class FilterActivity extends AppCompatActivity implements BaseRecyclerAda
 
     private File inputFile;
 
+    private GPUImageFilter mFilter;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +78,7 @@ public class FilterActivity extends AppCompatActivity implements BaseRecyclerAda
         boolean testImage = getIntent().getBooleanExtra("test_image", true);
         if (TextUtils.isEmpty(inputPath)) {
             //没有路径就用测试文件
-            inputFile = testImage ? new File(getExternalCacheDir(), "test.jpg") :
+            inputFile = testImage ? new File(getExternalCacheDir(), "test1.jpg") :
                     new File(getExternalCacheDir(), "test.mp4");
             FileUtils.copyAssetFile(this, inputFile.getName(), inputFile);
         } else {
@@ -125,7 +128,8 @@ public class FilterActivity extends AppCompatActivity implements BaseRecyclerAda
     private void setGPUImageFilter(int position) {
         final FilterModel item = mFilterAdapter.getItem(position);
         mFilterAdapter.setCheckedPosition(position);
-        texture.setFilter(item.getFilter());
+        mFilter = item.getFilter();
+        texture.setFilter(mFilter);
     }
 
     @Override
@@ -221,10 +225,11 @@ public class FilterActivity extends AppCompatActivity implements BaseRecyclerAda
     public void clickExportFile(MenuItem item) {
         File outputFile = new File(getExternalCacheDir(), "filter.jpg");
         new GPUImageOutput(texture.getGPUImage())
+                .setFilterByClass(mFilter)
                 .setOutputFormat(Bitmap.CompressFormat.JPEG)
                 .setQuality(80)
                 .setOutputFile(outputFile)
-                .outputFilterBitmap(null, GPUImageRxJava2Adapter.<File>create())
+                .outputFilterBitmap(GPUImageRxJava2Adapter.<File>create())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleLoadingDialogObserver<File>(this) {
@@ -234,6 +239,7 @@ public class FilterActivity extends AppCompatActivity implements BaseRecyclerAda
                         Toast.makeText(FilterActivity.this, "保存成功->" + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
                     }
                 });
+
     }
 
     @Override

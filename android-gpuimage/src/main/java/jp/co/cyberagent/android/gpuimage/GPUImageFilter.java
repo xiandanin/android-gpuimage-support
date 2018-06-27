@@ -22,6 +22,8 @@ import android.graphics.PointF;
 import android.opengl.GLES20;
 
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.nio.FloatBuffer;
 import java.util.LinkedList;
 
@@ -127,7 +129,8 @@ public class GPUImageFilter {
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
     }
 
-    protected void onDrawArraysPre() {}
+    protected void onDrawArraysPre() {
+    }
 
     protected void runPendingOnDrawTasks() {
         while (!mRunOnDraw.isEmpty()) {
@@ -274,5 +277,29 @@ public class GPUImageFilter {
     public static String convertStreamToString(java.io.InputStream is) {
         java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
+    }
+
+
+    @Override
+    public GPUImageFilter clone(){
+        try {
+            final Class<? extends GPUImageFilter> filterClass = getClass();
+            final GPUImageFilter newFilter = filterClass.newInstance();
+            final Field[] fields = filterClass.getDeclaredFields();
+            for (Field field : fields) {
+                boolean isStatic = Modifier.isStatic(field.getModifiers());
+                if (!isStatic) {
+                    field.setAccessible(true);
+                    final Object value = field.get(this);
+                    field.set(newFilter, value);
+                }
+            }
+            return newFilter;
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
+        return this;
     }
 }

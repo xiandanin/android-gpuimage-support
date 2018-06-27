@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 import jp.co.cyberagent.android.gpuimage.GPUImage;
+import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
 
 /**
  * @author dengyuhan
@@ -17,12 +18,13 @@ public class GPUImageOutput {
     public static final int DEFAULT_QUALITY = 100;
 
     private GPUImage mGPUImage;
+    private GPUImageFilter mOutputFilter;
     private Bitmap.CompressFormat mCompressFormat = DEFAULT_OUTPUT_FORMAT;
     private int mQuality = DEFAULT_QUALITY;
     private File mOutputFile;
 
     public GPUImageOutput(GPUImage gpuImage) {
-        this.mGPUImage = gpuImage;
+        this.mGPUImage = gpuImage.clone();
     }
 
     public GPUImageOutput setOutputFormat(Bitmap.CompressFormat format) {
@@ -40,8 +42,25 @@ public class GPUImageOutput {
         return this;
     }
 
+    public GPUImageOutput setFilterByClass(GPUImageFilter filter) {
+        return setFilter(filter.clone());
+    }
+
+    public GPUImageOutput setFilter(GPUImageFilter filter) {
+        if (filter == null) {
+            filter = new GPUImageFilter();
+        }
+        this.mOutputFilter = filter;
+        this.mGPUImage.setFilter(mOutputFilter);
+        return this;
+    }
+
     public GPUImage getGPUImage() {
         return mGPUImage;
+    }
+
+    public <Observable> Observable getFilterBitmap(GPUImageRxJavaAdapter<Observable, Bitmap> adapter) {
+        return getFilterBitmap(null, adapter);
     }
 
     public <Observable> Observable getFilterBitmap(final Bitmap srcBitmap, GPUImageRxJavaAdapter<Observable, Bitmap> adapter) {
@@ -58,6 +77,10 @@ public class GPUImageOutput {
         });
     }
 
+    public <Observable> Observable outputFilterBitmap(GPUImageRxJavaAdapter<Observable, File> adapter) {
+        return outputFilterBitmap(null, adapter);
+    }
+
     public <Observable> Observable outputFilterBitmap(final Bitmap srcBitmap, GPUImageRxJavaAdapter<Observable, File> adapter) {
         return adapter.asObservable(new FunctionDelegate<File>() {
             @Override
@@ -72,5 +95,13 @@ public class GPUImageOutput {
                 return mOutputFile;
             }
         });
+    }
+
+    public String upperCase(String str) {
+        char[] ch = str.toCharArray();
+        if (ch[0] >= 'a' && ch[0] <= 'z') {
+            ch[0] = (char) (ch[0] - 32);
+        }
+        return new String(ch);
     }
 }
