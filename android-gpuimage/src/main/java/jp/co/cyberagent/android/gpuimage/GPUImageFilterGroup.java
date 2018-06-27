@@ -118,10 +118,14 @@ public class GPUImageFilterGroup extends GPUImageFilter {
     }
 
     private void destroyFrameBuffers() {
-        OpenGlUtils.destroyFrameBuffers(mFrameBufferTextures, mFrameBuffers);
-
-        mFrameBufferTextures = null;
-        mFrameBuffers = null;
+        if (mFrameBufferTextures != null) {
+            GLES20.glDeleteTextures(mFrameBufferTextures.length, mFrameBufferTextures, 0);
+            mFrameBufferTextures = null;
+        }
+        if (mFrameBuffers != null) {
+            GLES20.glDeleteFramebuffers(mFrameBuffers.length, mFrameBuffers, 0);
+            mFrameBuffers = null;
+        }
     }
 
     /*

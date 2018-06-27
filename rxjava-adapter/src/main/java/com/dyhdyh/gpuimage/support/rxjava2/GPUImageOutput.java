@@ -43,13 +43,10 @@ public class GPUImageOutput {
     }
 
     public GPUImageOutput setFilterByClass(GPUImageFilter filter) {
-        return setFilter(filter.clone());
+        return setFilter(filter == null ? new GPUImageFilter() : filter.clone());
     }
 
     public GPUImageOutput setFilter(GPUImageFilter filter) {
-        if (filter == null) {
-            filter = new GPUImageFilter();
-        }
         this.mOutputFilter = filter;
         this.mGPUImage.setFilter(mOutputFilter);
         return this;

@@ -31,6 +31,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -127,15 +128,15 @@ public class GPUImageRenderer implements GLTextureView.Renderer, PreviewCallback
 
     @Override
     public void onSurfaceDestroyed(GL10 gl) {
-        
+
     }
 
     /**
      * Sets the background color
      *
-     * @param red red color value
+     * @param red   red color value
      * @param green green color value
-     * @param blue red color value
+     * @param blue  red color value
      */
     public void setBackgroundColor(float red, float green, float blue) {
         mBackgroundRed = red;
@@ -201,9 +202,15 @@ public class GPUImageRenderer implements GLTextureView.Renderer, PreviewCallback
             public void run() {
                 final GPUImageFilter oldFilter = mFilter;
                 mFilter = filter;
-                if (oldFilter != null) {
+                if (oldFilter instanceof GPUImageFilterGroup) {
+                    List<GPUImageFilter> oldFilters = ((GPUImageFilterGroup) oldFilter).getFilters();
+                    for (GPUImageFilter filter : oldFilters) {
+                        filter.destroy();
+                    }
+                } else {
                     oldFilter.destroy();
                 }
+
                 mFilter.init();
                 GLES20.glUseProgram(mFilter.getProgram());
                 mFilter.onOutputSizeChanged(mOutputWidth, mOutputHeight);
@@ -321,7 +328,7 @@ public class GPUImageRenderer implements GLTextureView.Renderer, PreviewCallback
     }
 
     public void setRotationCamera(final Rotation rotation, final boolean flipHorizontal,
-            final boolean flipVertical) {
+                                  final boolean flipVertical) {
         setRotation(rotation, flipVertical, flipHorizontal);
     }
 
