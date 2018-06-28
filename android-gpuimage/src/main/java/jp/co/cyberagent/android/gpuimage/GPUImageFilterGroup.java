@@ -180,8 +180,8 @@ public class GPUImageFilterGroup extends GPUImageFilter {
                 GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0,
                         GLES20.GL_TEXTURE_2D, mFrameBufferTextures[i], 0);
 
-                Log.d(TAG, String.format("created texture:%d", mFrameBufferTextures[i]));
-                Log.d(TAG, String.format("created framebuffer:%d", mFrameBuffers[i]));
+                //Log.d(TAG, String.format("created texture:%d", mFrameBufferTextures[i]));
+                //Log.d(TAG, String.format("created framebuffer:%d", mFrameBuffers[i]));
 
                 GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
                 GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
@@ -229,7 +229,7 @@ public class GPUImageFilterGroup extends GPUImageFilter {
                         previousTexture = mFrameBufferTextures[i];
                     }
                 } catch (IndexOutOfBoundsException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                     Log.e(TAG, "onDraw : " + e.toString());
                 }
             }
