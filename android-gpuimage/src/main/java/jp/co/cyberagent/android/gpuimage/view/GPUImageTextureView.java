@@ -2,7 +2,6 @@ package jp.co.cyberagent.android.gpuimage.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.util.AttributeSet;
 
 import jp.co.cyberagent.android.gpuimage.GPUImage;

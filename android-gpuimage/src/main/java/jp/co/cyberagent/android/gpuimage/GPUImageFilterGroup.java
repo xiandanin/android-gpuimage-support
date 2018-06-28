@@ -99,8 +99,8 @@ public class GPUImageFilterGroup extends GPUImageFilter {
     @Override
     public synchronized void onInit() {
         super.onInit();
-        for (GPUImageFilter filter : mFilters) {
-            filter.init();
+        for (int i = 0; i < mFilters.size(); i++) {
+            mFilters.get(i).init();
         }
     }
 
@@ -111,8 +111,8 @@ public class GPUImageFilterGroup extends GPUImageFilter {
     @Override
     public synchronized void onDestroy() {
         destroyFrameBuffers();
-        for (GPUImageFilter filter : mFilters) {
-            filter.destroy();
+        for (int i = 0; i < mFilters.size(); i++) {
+            mFilters.get(i).destroy();
         }
         super.onDestroy();
     }
