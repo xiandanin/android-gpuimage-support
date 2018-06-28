@@ -54,7 +54,9 @@ public class GPUImageCoverUtil {
             retriever.setDataSource(mSourcePath);
             bitmap = retriever.getFrameAtTime();
         }
-        return Bitmap.createScaledBitmap(bitmap, width, height, true);
+        int newWidth = width * 2;
+        int newHeight = newWidth * bitmap.getHeight() / bitmap.getWidth();
+        return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
     }
 
     /**

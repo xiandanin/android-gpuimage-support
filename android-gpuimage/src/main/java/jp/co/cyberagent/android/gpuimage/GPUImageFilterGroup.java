@@ -212,7 +212,7 @@ public class GPUImageFilterGroup extends GPUImageFilter {
                     GPUImageFilter filter = mMergedFilters.get(i);
                     boolean isNotLast = i < size - 1;
                     if (isNotLast) {
-                        if (i < mFrameBuffers.length){
+                        if (i < mFrameBuffers.length) {
                             GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, mFrameBuffers[i]);
                         }
                     } else {
@@ -263,7 +263,8 @@ public class GPUImageFilterGroup extends GPUImageFilter {
         }
 
         List<GPUImageFilter> filters;
-        for (GPUImageFilter filter : mFilters) {
+        for (int i = 0; i < mFilters.size(); i++) {
+            GPUImageFilter filter = mFilters.get(i);
             if (filter instanceof GPUImageFilterGroup) {
                 ((GPUImageFilterGroup) filter).updateMergedFilters();
                 filters = ((GPUImageFilterGroup) filter).getMergedFilters();
