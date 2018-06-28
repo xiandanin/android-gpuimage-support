@@ -31,7 +31,6 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -202,12 +201,8 @@ public class GPUImageRenderer implements GLTextureView.Renderer, PreviewCallback
             public void run() {
                 final GPUImageFilter oldFilter = mFilter;
                 mFilter = filter;
-                if (oldFilter instanceof GPUImageFilterGroup) {
-                    List<GPUImageFilter> oldFilters = ((GPUImageFilterGroup) oldFilter).getFilters();
-                    for (GPUImageFilter filter : oldFilters) {
-                        filter.destroy();
-                    }
-                } else {
+
+                if (oldFilter != null) {
                     oldFilter.destroy();
                 }
 
