@@ -1340,6 +1340,7 @@ public class GLTextureView
                             }
 
                             // By design, this is the only place in a GLThread thread where we wait().
+                            /*
                             if (LOG_THREADS) {
                                 Log.i("GLThread", "waiting tid=" + getId()
                                         + " mHaveEglContext: " + mHaveEglContext
@@ -1353,6 +1354,7 @@ public class GLTextureView
                                         + " mRequestRender: " + mRequestRender
                                         + " mRenderMode: " + mRenderMode);
                             }
+                            */
                             sGLThreadManager.wait();
                         }
                     } // end of synchronized(sGLThreadManager)

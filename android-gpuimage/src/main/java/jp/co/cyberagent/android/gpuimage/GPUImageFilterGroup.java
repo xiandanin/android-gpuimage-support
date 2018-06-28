@@ -228,8 +228,9 @@ public class GPUImageFilterGroup extends GPUImageFilter {
                     if (isNotLast && mFrameBufferTextures != null && mFrameBufferTextures.length > 0) {
                         previousTexture = mFrameBufferTextures[i];
                     }
-                } catch (ArrayIndexOutOfBoundsException e) {
+                } catch (IndexOutOfBoundsException e) {
                     e.printStackTrace();
+                    Log.e(TAG, "onDraw : " + e.toString());
                 }
             }
         }
