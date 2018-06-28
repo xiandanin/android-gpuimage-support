@@ -212,7 +212,9 @@ public class GPUImageFilterGroup extends GPUImageFilter {
                     GPUImageFilter filter = mMergedFilters.get(i);
                     boolean isNotLast = i < size - 1;
                     if (isNotLast) {
-                        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, mFrameBuffers[i]);
+                        if (i < mFrameBuffers.length){
+                            GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, mFrameBuffers[i]);
+                        }
                     } else {
                         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, currentFBO[0]);
                     }

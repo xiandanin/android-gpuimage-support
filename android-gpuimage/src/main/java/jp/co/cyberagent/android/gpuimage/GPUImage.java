@@ -737,5 +737,5 @@ public class GPUImage {
         void response(T item);
     }
 
-    public enum ScaleType {CENTER_INSIDE, CENTER_CROP}
+    public enum ScaleType {VIEW_FIT_CENTER,CENTER_INSIDE, CENTER_CROP}
 }

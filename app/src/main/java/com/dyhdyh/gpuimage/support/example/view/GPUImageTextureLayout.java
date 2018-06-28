@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
@@ -41,10 +42,12 @@ public class GPUImageTextureLayout extends FrameLayout {
 
     public void setDataSource(boolean image, String path) {
         final LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        lp.gravity = Gravity.CENTER;
         if (image) {
             mImageView = new GPUImageTextureView(getContext());
+            mImageView.setScaleType(GPUImage.ScaleType.VIEW_FIT_CENTER);
             mImageView.setLayoutParams(lp);
-            mImageView.setImage(BitmapFactory.decodeFile(path));
+            mImageView.setImageBitmap(BitmapFactory.decodeFile(path));
             addView(mImageView);
         } else {
             mVideoView = new GPUImageVideoView(getContext());
