@@ -231,8 +231,9 @@ public class GPUImageFilterGroup extends GPUImageFilter {
                         previousTexture = mFrameBufferTextures[i];
                     }
                 } catch (IndexOutOfBoundsException e) {
-                    //e.printStackTrace();
                     Log.e(TAG, "onDraw : " + e.toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }
