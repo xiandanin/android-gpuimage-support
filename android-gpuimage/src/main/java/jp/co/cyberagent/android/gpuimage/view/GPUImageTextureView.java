@@ -64,6 +64,11 @@ public class GPUImageTextureView extends GLTextureView {
         this.mBitmap = bitmap;
     }
 
+    @Override
+    public void setBackgroundColor(int color) {
+        mGPUImage.setBackgroundColor(color);
+    }
+
     public void setFilter(GPUImageFilter filter) {
         mGPUImage.setFilter(filter);
     }

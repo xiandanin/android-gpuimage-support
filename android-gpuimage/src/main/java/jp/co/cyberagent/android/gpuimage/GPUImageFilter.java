@@ -104,6 +104,7 @@ public class GPUImageFilter {
 
     public void onDraw(final int textureId, final FloatBuffer cubeBuffer,
                        final FloatBuffer textureBuffer) {
+        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
         GLES20.glUseProgram(mGLProgId);
         runPendingOnDrawTasks();
         if (!mIsInitialized) {

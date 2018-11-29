@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.dyhdyh.gpuimage.support.example.R;
 import com.dyhdyh.gpuimage.support.video.view.GPUImageVideoView;
 
 import jp.co.cyberagent.android.gpuimage.GPUImage;
@@ -45,7 +46,8 @@ public class GPUImageTextureLayout extends FrameLayout {
         lp.gravity = Gravity.CENTER;
         if (image) {
             mImageView = new GPUImageTextureView(getContext());
-            mImageView.setScaleType(GPUImage.ScaleType.VIEW_FIT_CENTER);
+            mImageView.setBackgroundColor(getResources().getColor(R.color.colorBackground));
+            mImageView.setScaleType(GPUImage.ScaleType.CENTER_INSIDE);
             mImageView.setLayoutParams(lp);
             mImageView.setImageBitmap(BitmapFactory.decodeFile(path));
             addView(mImageView);

@@ -17,8 +17,7 @@
         <com.dyhdyh.gpuimage.support.example.view.GPUImageTextureLayout
             android:id="@+id/texture"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorBackground" />
+            android:layout_height="match_parent" />
     </RelativeLayout>
 
     <RelativeLayout
